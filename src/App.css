@@ -1,0 +1,149 @@
+.app {
+  min-height: 100vh;
+  color: #f2f5f7;
+  padding: 3rem 1.25rem 4rem;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.hero {
+  background: linear-gradient(145deg, rgba(10, 60, 74, 0.9), rgba(16, 20, 25, 0.95));
+  border: 1px solid rgba(131, 232, 255, 0.25);
+  border-radius: 28px;
+  padding: 3rem;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-size: 0.78rem;
+  color: #8ceaff;
+}
+
+h1 {
+  font-size: clamp(2rem, 5vw, 4rem);
+  line-height: 1.05;
+  margin: 0.5rem 0 1rem;
+}
+
+.hero-copy {
+  max-width: 60ch;
+  color: #d0dde1;
+}
+
+.hero-actions {
+  display: flex;
+  gap: 0.9rem;
+  margin-top: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.btn {
+  border-radius: 999px;
+  padding: 0.7rem 1.2rem;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: #86ecff;
+  color: #00222e;
+}
+
+.btn-ghost {
+  border: 1px solid rgba(134, 236, 255, 0.5);
+  color: #d6f8ff;
+}
+
+.panel {
+  margin-top: 1.8rem;
+  background: rgba(9, 12, 16, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 22px;
+  padding: 1.4rem;
+}
+
+.panel-head {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: baseline;
+  margin-bottom: 1rem;
+}
+
+.panel-head h2 {
+  margin: 0;
+  font-size: clamp(1.3rem, 2.5vw, 2rem);
+}
+
+.panel-head span {
+  color: #93a8b0;
+  font-size: 0.9rem;
+}
+
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 1rem;
+}
+
+.card {
+  background: linear-gradient(180deg, rgba(20, 24, 30, 0.95), rgba(10, 13, 18, 0.95));
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 1rem;
+}
+
+.card h3 {
+  margin: 0.35rem 0 0.65rem;
+  font-size: 1.1rem;
+}
+
+.card p {
+  color: #bccbd0;
+  margin: 0;
+}
+
+.meta {
+  color: #88e9ff !important;
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.card-link {
+  display: inline-block;
+  margin-top: 1rem;
+  color: #88e9ff;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+.system-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 1rem;
+}
+
+.system-grid > div {
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 1rem;
+  background: rgba(9, 13, 17, 0.8);
+}
+
+.step {
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #8ceaff;
+  margin: 0 0 0.5rem;
+}
+
+.footer {
+  margin-top: 1.5rem;
+  text-align: center;
+  color: #8ea0a7;
+  font-size: 0.9rem;
+}
