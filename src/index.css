@@ -1,9 +1,14 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Syne:wght@600;700;800&display=swap');
+
 :root {
-  font-family: "Space Grotesk", "Sora", "IBM Plex Sans", sans-serif;
+  font-family: 'Space Grotesk', 'IBM Plex Sans', sans-serif;
   line-height: 1.5;
   font-weight: 400;
   color: #f2f5f7;
-  background: radial-gradient(circle at 20% 10%, #154355 0%, #0b1117 42%, #06090d 100%);
+  background:
+    radial-gradient(circle at 15% 12%, #1e6882 0%, transparent 26%),
+    radial-gradient(circle at 86% 82%, #0f3451 0%, transparent 24%),
+    linear-gradient(170deg, #040c13 0%, #08101b 40%, #050910 100%);
   font-synthesis: none;
   text-rendering: optimizeLegibility;
   -webkit-font-smoothing: antialiased;
