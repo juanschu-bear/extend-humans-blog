@@ -115,6 +115,32 @@ const chapterThemes = [
   { base: '#121b10', accent: '#7dffa9' },
 ]
 
+const pathModes = [
+  {
+    id: 'mind',
+    title: 'Mind Path',
+    text: 'Start with identity, consciousness, and the illusion of self-certainty.',
+    image: 'https://cdn.marblism.com/EM01FQIoBP_.webp',
+  },
+  {
+    id: 'system',
+    title: 'System Path',
+    text: 'Read power structures, social architectures, and decision pre-conditioning.',
+    image: 'https://cdn.marblism.com/5y6cPsg2e5m.webp',
+  },
+  {
+    id: 'future',
+    title: 'Future Path',
+    text: 'Move through AI, interfaces, and machine-shaped perception loops.',
+    image: 'https://cdn.marblism.com/nvQQMuCo1kZ.webp',
+  },
+] as const
+
+const archivePreview = Array.from({ length: 18 }).map((_, index) => ({
+  id: String(index + 1).padStart(3, '0'),
+  title: `Upcoming Transmission ${String(index + 1).padStart(3, '0')}`,
+}))
+
 function App() {
   const [mouse, setMouse] = useState({ x: 50, y: 20 })
   const [scrollProgress, setScrollProgress] = useState(0)
@@ -124,6 +150,7 @@ function App() {
   const [corridorProgress, setCorridorProgress] = useState(0)
   const [activeChapter, setActiveChapter] = useState(0)
   const [trailPoints, setTrailPoints] = useState<TrailPoint[]>([])
+  const [pathChoice, setPathChoice] = useState<(typeof pathModes)[number]['id']>('mind')
 
   const corridorRef = useRef<HTMLElement | null>(null)
   const chapterRefs = useRef<(HTMLElement | null)[]>([])
@@ -168,8 +195,9 @@ function App() {
 
       if (corridorRef.current) {
         const rect = corridorRef.current.getBoundingClientRect()
-        const raw = (window.innerHeight - rect.top) / (rect.height + window.innerHeight)
-        setCorridorProgress(Math.min(1, Math.max(0, raw)))
+        const raw = (window.innerHeight * 0.55 - rect.top) / (rect.height - window.innerHeight * 0.45)
+        const normalized = Math.min(1, Math.max(0, raw))
+        setCorridorProgress(normalized * Math.max(1, posts.length - 1))
       }
 
       const centerY = window.innerHeight * 0.5
@@ -235,6 +263,9 @@ function App() {
   }
 
   const theme = chapterThemes[activeChapter] ?? chapterThemes[0]
+  const activeCorridorIndex = Math.round(corridorProgress)
+  const activeCorridorPost = posts[activeCorridorIndex] ?? posts[0]
+  const activePath = pathModes.find(mode => mode.id === pathChoice) ?? pathModes[0]
 
   return (
     <div className="app" style={{ '--chapter-base': theme.base, '--chapter-accent': theme.accent } as CSSProperties}>
@@ -253,6 +284,8 @@ function App() {
               top: point.y,
               opacity: Math.max(0, 0.8 - index * 0.05),
               transform: `translate(-50%, -50%) scale(${Math.max(0.25, 1 - index * 0.05)})`,
+              background: `hsl(${188 + index * 8}, 100%, ${74 - index * 1.6}%)`,
+              boxShadow: `0 0 ${12 - index * 0.4}px hsla(${188 + index * 8}, 100%, 70%, 0.6)`,
             }}
           />
         ))}
@@ -305,16 +338,18 @@ function App() {
         </div>
 
         <div className="corridor-sticky">
+          <div className="corridor-status">
+            <strong>Now Entering: {activeCorridorPost.id}</strong>
+            <span>{activeCorridorPost.title}</span>
+          </div>
           <div className="corridor-stage">
             {posts.map((post, index) => {
-              const total = posts.length - 1 || 1
-              const normalized = index / total
-              const delta = (normalized - corridorProgress) * posts.length
-              const z = 560 - Math.abs(delta) * 760
-              const x = delta * 180
-              const y = Math.abs(delta) * 24
-              const rotateY = delta * -16
-              const opacity = Math.max(0.2, 1 - Math.abs(delta) * 0.36)
+              const delta = index - corridorProgress
+              const z = 280 - Math.abs(delta) * 210
+              const x = delta * 140
+              const y = Math.abs(delta) * 20
+              const rotateY = delta * -11
+              const opacity = Math.max(0.28, 1 - Math.abs(delta) * 0.24)
               const active = Math.abs(delta) < 0.5
 
               return (
@@ -333,6 +368,15 @@ function App() {
                 </article>
               )
             })}
+          </div>
+          <div className="corridor-track">
+            {posts.map((post, index) => (
+              <div
+                key={`dot-${post.id}`}
+                className={`corridor-dot${activeCorridorIndex === index ? ' active' : ''}`}
+                title={post.id}
+              />
+            ))}
           </div>
           <p className="corridor-hint">Keep scrolling to move deeper into the essay vault.</p>
         </div>
@@ -485,6 +529,55 @@ function App() {
           <div className={adventureScore >= 50 ? 'on' : ''}>50 · Pattern Reader</div>
           <div className={adventureScore >= 75 ? 'on' : ''}>75 · Frame Hacker</div>
           <div className={adventureScore >= 100 ? 'on' : ''}>100 · Cognitive Cartographer</div>
+        </div>
+      </section>
+
+      <section className="panel path-panel">
+        <div className="panel-head">
+          <h2>Choose Your Journey</h2>
+          <span>non-linear reading adventure</span>
+        </div>
+
+        <div className="path-controls">
+          {pathModes.map(mode => (
+            <button
+              key={mode.id}
+              className={pathChoice === mode.id ? 'active' : ''}
+              onClick={() => setPathChoice(mode.id)}
+              data-magnetic
+            >
+              {mode.title}
+            </button>
+          ))}
+        </div>
+
+        <article className="path-feature" data-magnetic>
+          <img src={activePath.image} alt={activePath.title} />
+          <div className="path-overlay" />
+          <div className="path-copy">
+            <p className="step">Current Route</p>
+            <h3>{activePath.title}</h3>
+            <p>{activePath.text}</p>
+          </div>
+        </article>
+      </section>
+
+      <section className="panel archive-panel">
+        <div className="panel-head">
+          <h2>Expanding Archive</h2>
+          <span>designed for 50+ essays</span>
+        </div>
+        <p className="archive-copy">
+          This project is built as a living intelligence archive. New essays drop continuously and snap into the same
+          narrative universe.
+        </p>
+        <div className="archive-grid">
+          {archivePreview.map(item => (
+            <article key={item.id} className="archive-card" data-magnetic>
+              <p>{item.id}</p>
+              <h3>{item.title}</h3>
+            </article>
+          ))}
         </div>
       </section>
 
