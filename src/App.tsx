@@ -99,12 +99,12 @@ const worlds: WorldTheme[] = [
   { base: '#111d18', accent: '#9ff7d0', glow: '#7fe8bf', mood: 'Afterglow' },
 ]
 
-const manifesto = ['Consciousness', 'Perception', 'Language', 'Bias', 'Systems', 'Agency', 'Memory', 'Meaning']
+const manifesto = ['Consciousness', 'Language', 'Emotion', 'Systems']
 
 const heroMetrics = [
-  { label: 'New essays', value: 'Weekly', detail: 'Neue Texte docken direkt an die Bibliothek an.' },
-  { label: 'Podcast feed', value: 'Live', detail: 'Spotify-Episodes und Essays sprechen dieselbe Sprache.' },
-  { label: 'Style', value: 'Future Library', detail: 'Ein klarer Leseraum mit Tiefe statt reiner Effektshow.' },
+  { label: 'New articles', value: 'Weekly', detail: 'Fresh posts and discussion notes every week.' },
+  { label: 'Essay lane', value: 'Focused', detail: 'One flagship essay at a time, then expanded.' },
+  { label: 'Style', value: 'Future Library', detail: 'A calm, premium reading room over visual noise.' },
 ]
 
 const chapterCards = [
@@ -371,19 +371,19 @@ function Landing() {
           <div className="hero-main">
             <div className="mood-badge">Collection: {activeTheme.mood}</div>
             <div className="live-build-banner">Extended Humans Blog</div>
-            <p className="eyebrow">Extended Humans Essays</p>
+            <p className="eyebrow">Extended Humans Blog</p>
             <h1>
               <span>Extended</span>
               <span>Humans Blog</span>
             </h1>
-            <p className="hero-kicker">Deep essays, podcast notes, and a clear reading system.</p>
+            <p className="hero-kicker">Articles first. One flagship essay lane. Podcast support.</p>
             <p className="hero-copy">
-              Essays über Bewusstsein, Wahrnehmung, Emotionen, Sprache und die Systeme, die unser Denken erweitern oder einschränken.
+              A clear reading space for cognition, language, emotion, and AI-era thinking.
             </p>
 
             <div className="hero-actions">
-              <a href="#corridor" className="btn btn-primary" data-magnetic>Open Library</a>
-              <a href="#podcast" className="btn btn-ghost" data-magnetic>Podcast hören</a>
+              <a href="#corridor" className="btn btn-primary" data-magnetic>Browse Articles</a>
+              <a href="#podcast" className="btn btn-ghost" data-magnetic>Listen to Podcast</a>
             </div>
 
             <div className="manifesto-grid">
@@ -394,15 +394,10 @@ function Landing() {
           </div>
 
           <aside className="hero-console" data-magnetic>
-            <div className="console-orbit" aria-hidden="true">
-              <span />
-              <span />
-              <span />
-            </div>
-            <p className="step">Editorial Console</p>
-            <h3>Ideas with structure.</h3>
+            <p className="step">Reading Focus</p>
+            <h3>Simple structure, strong content.</h3>
             <p className="hero-console-copy">
-              Ein Leseraum, der Orientierung gibt: klar, hochwertig und auf langfristiges Lesen ausgelegt.
+              We publish in English first, then add translations once each piece is stable.
             </p>
             <div className="hero-metrics">
               {heroMetrics.map(metric => (
@@ -439,8 +434,8 @@ function Landing() {
         worldRefs.current[1] = el
       }} data-world-index="1">
         <div className="panel-head corridor-head">
-          <h2>Essay Corridor</h2>
-          <span>klarer Fokus statt creepy Tunnel</span>
+          <h2>Article Library</h2>
+          <span>Clear navigation, fast entry points.</span>
         </div>
 
         <div className="article-links">
@@ -453,12 +448,12 @@ function Landing() {
         </div>
 
         <div className="corridor-ui">
-          <button onClick={() => stepCorridor(-1)} data-magnetic aria-label="Vorheriger Essay">←</button>
+          <button onClick={() => stepCorridor(-1)} data-magnetic aria-label="Previous article">←</button>
           <div className="corridor-status">
             <strong>Now Entering {corridorPost.id}</strong>
             <p>{corridorPost.strap}</p>
           </div>
-          <button onClick={() => stepCorridor(1)} data-magnetic aria-label="Nächster Essay">→</button>
+          <button onClick={() => stepCorridor(1)} data-magnetic aria-label="Next article">→</button>
         </div>
 
         <div className="corridor-stage">
