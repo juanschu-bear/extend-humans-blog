@@ -5,6 +5,8 @@ import ConsciousnessArticle from './articles/ConsciousnessArticle'
 import DataMachineArticle from './articles/DataMachineArticle'
 import LearningArticle from './articles/LearningArticle'
 import CageOfProofArticle from './articles/CageOfProofArticle'
+import LanguageTrapArticle from './articles/LanguageTrapArticle'
+import EmotionsArticle from './articles/EmotionsArticle'
 
 type Post = {
   id: string
@@ -446,6 +448,8 @@ function Landing() {
           <Link to="/data-machine" data-magnetic>Data Machine</Link>
           <Link to="/the-more-you-learn" data-magnetic>The More You Learn</Link>
           <Link to="/cage-of-proof" data-magnetic>Cage of Proof</Link>
+          <Link to="/language-trap" data-magnetic>Language Trap</Link>
+          <Link to="/emotions-installed" data-magnetic>Emotions Installed</Link>
         </div>
 
         <div className="corridor-ui">
@@ -847,6 +851,8 @@ function App() {
       <Route path="/data-machine" element={<DataMachineArticle />} />
       <Route path="/the-more-you-learn" element={<LearningArticle />} />
       <Route path="/cage-of-proof" element={<CageOfProofArticle />} />
+      <Route path="/language-trap" element={<LanguageTrapArticle />} />
+      <Route path="/emotions-installed" element={<EmotionsArticle />} />
     </Routes>
   )
 }

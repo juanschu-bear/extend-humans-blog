@@ -1,22 +1,24 @@
 import { useState } from 'react';
+import type { JSX } from 'react';
 
-const flags = { en: '🇬🇧', de: '🇩🇪', es: '🇪🇸' };
+type Lang = 'en' | 'de' | 'es';
+const flags: Record<Lang, string> = { en: '🇬🇧', de: '🇩🇪', es: '🇪🇸' };
 const C = { deep: '#0F0E17', card: '#1E1D2F', text: '#E0DFF0', dim: '#9896B0', crimson: '#E94560', gold: '#F5C842', cyan: '#2CB6D6', violet: '#A855F7', green: '#34D399' };
-function L(o: Record<string, string>, l: string) { return o[l] || o.en; }
+function L(o: Record<string, string>, l: string): string { return o[l] || o.en; }
 
-function PQ({ text, color }: { text: string; color: string }) {
+function PQ({ text, color }: { text: string; color: string }): JSX.Element { 
   return (<div style={{ margin: '56px 0', padding: 40, position: 'relative', textAlign: 'center', borderRadius: 16, border: `1px solid ${color}33`, background: `linear-gradient(135deg, ${color}14, ${color}08)` }}>
     <span style={{ position: 'absolute', top: -10, left: 30, fontFamily: "'Playfair Display', serif", fontSize: 80, lineHeight: 1, opacity: 0.15, color }}>&ldquo;</span>
     <p style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(22px, 3vw, 28px)', fontWeight: 700, fontStyle: 'italic', lineHeight: 1.4, color, margin: 0 }}>{text}</p>
   </div>);
 }
-function ST({ text, color }: { text: string; color: string }) { return <p style={{ fontSize: 22, fontWeight: 700, color: '#fff', margin: '32px 0', paddingLeft: 20, borderLeft: `3px solid ${color}`, lineHeight: 1.5 }}>{text}</p>; }
-function Sep() { return (<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, margin: '64px 0' }}><div style={{ width: 40, height: 1, background: `${C.cyan}4D` }} /><div style={{ width: 6, height: 6, borderRadius: '50%', background: C.cyan, opacity: 0.5 }} /><div style={{ width: 40, height: 1, background: `${C.cyan}4D` }} /></div>); }
-function SH({ num, title, highlight, color }: { num: string; title: string; highlight: string; color: string }) { return (<div style={{ marginTop: 100, marginBottom: 40 }}><div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, letterSpacing: 3, textTransform: 'uppercase', color: C.cyan, marginBottom: 12 }}>{num}</div><h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 700, lineHeight: 1.2, color: '#fff', margin: 0 }}>{title}{' '}<span style={{ background: `linear-gradient(135deg, ${color}, ${color}99)`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>{highlight}</span></h2><div style={{ width: 50, height: 3, marginTop: 20, borderRadius: 2, background: `linear-gradient(90deg, ${color}, ${color}99)` }} /></div>); }
-function Card({ label, text, color }: { label: string; text: string; color: string }) { return (<div style={{ background: C.card, borderRadius: 12, padding: '28px 32px', borderLeft: `3px solid ${color}`, marginBottom: 20 }}><div style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700, fontSize: 20, marginBottom: 8, color }}>{label}</div><p style={{ color: C.dim, fontSize: 17, lineHeight: 1.6, margin: 0 }}>{text}</p></div>); }
-function TwoCol({ lt, l, lc, rt, r, rc }: { lt: string; l: string; lc: string; rt: string; r: string; rc: string }) { return (<div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24, margin: '40px 0' }}>{[[lt,l,lc],[rt,r,rc]].map(([t,x,c],i) => (<div key={i} style={{ padding: 32, borderRadius: 16, background: `linear-gradient(180deg, ${c}1A, ${C.card})`, border: `1px solid ${c}26`, position: 'relative', overflow: 'hidden' }}><div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: `linear-gradient(90deg, ${c}, ${c}99)` }} /><div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, letterSpacing: 3, textTransform: 'uppercase', color: c, marginBottom: 16 }}>{t}</div><p style={{ fontSize: 16, lineHeight: 1.65, color: C.text, margin: 0 }}>{x}</p></div>))}</div>); }
-function CTA({ text, sub }: { text: string; sub: string }) { return (<div style={{ margin: '48px 0', padding: 32, background: C.card, borderRadius: 12, textAlign: 'center', border: `1px solid ${C.green}33` }}><p style={{ fontFamily: "'Playfair Display', serif", fontSize: 22, fontWeight: 700, color: C.green, marginBottom: 12 }}>{text}</p><p style={{ fontSize: 16, color: C.dim, margin: 0 }}>{sub}</p></div>); }
-function TrioCard({ icon, title, text, color }: { icon: string; title: string; text: string; color: string }) { return (<div style={{ padding: 28, borderRadius: 14, background: C.card, border: '1px solid rgba(255,255,255,0.05)', textAlign: 'center', borderTop: `3px solid ${color}` }}><span style={{ fontSize: 36, display: 'block', marginBottom: 16 }}>{icon}</span><div style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700, fontSize: 18, color, marginBottom: 10 }}>{title}</div><p style={{ fontSize: 15, color: C.dim, lineHeight: 1.55, margin: 0 }}>{text}</p></div>); }
+function ST({ text, color }: { text: string; color: string }): JSX.Element {  return <p style={{ fontSize: 22, fontWeight: 700, color: '#fff', margin: '32px 0', paddingLeft: 20, borderLeft: `3px solid ${color}`, lineHeight: 1.5 }}>{text}</p>; }
+function Sep(): JSX.Element {  return (<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, margin: '64px 0' }}><div style={{ width: 40, height: 1, background: `${C.cyan}4D` }} /><div style={{ width: 6, height: 6, borderRadius: '50%', background: C.cyan, opacity: 0.5 }} /><div style={{ width: 40, height: 1, background: `${C.cyan}4D` }} /></div>); }
+function SH({ num, title, highlight, color }: { num: string; title: string; highlight: string; color: string }): JSX.Element {  return (<div style={{ marginTop: 100, marginBottom: 40 }}><div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, letterSpacing: 3, textTransform: 'uppercase' as const, color: C.cyan, marginBottom: 12 }}>{num}</div><h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 700, lineHeight: 1.2, color: '#fff', margin: 0 }}>{title}{' '}<span style={{ background: `linear-gradient(135deg, ${color}, ${color}99)`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>{highlight}</span></h2><div style={{ width: 50, height: 3, marginTop: 20, borderRadius: 2, background: `linear-gradient(90deg, ${color}, ${color}99)` }} /></div>); }
+function Card({ label, text, color }: { label: string; text: string; color: string }): JSX.Element {  return (<div style={{ background: C.card, borderRadius: 12, padding: '28px 32px', borderLeft: `3px solid ${color}`, marginBottom: 20 }}><div style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700, fontSize: 20, marginBottom: 8, color }}>{label}</div><p style={{ color: C.dim, fontSize: 17, lineHeight: 1.6, margin: 0 }}>{text}</p></div>); }
+function TwoCol({ lt, l, lc, rt, r, rc }: { lt: string; l: string; lc: string; rt: string; r: string; rc: string }): JSX.Element {  return (<div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24, margin: '40px 0' }}>{[[lt,l,lc],[rt,r,rc]].map(([t,x,c],i) => (<div key={i} style={{ padding: 32, borderRadius: 16, background: `linear-gradient(180deg, ${c}1A, ${C.card})`, border: `1px solid ${c}26`, position: 'relative', overflow: 'hidden' }}><div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: `linear-gradient(90deg, ${c}, ${c}99)` }} /><div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, letterSpacing: 3, textTransform: 'uppercase' as const, color: c, marginBottom: 16 }}>{t}</div><p style={{ fontSize: 16, lineHeight: 1.65, color: C.text, margin: 0 }}>{x}</p></div>))}</div>); }
+function CTA({ text, sub }: { text: string; sub: string }): JSX.Element {  return (<div style={{ margin: '48px 0', padding: 32, background: C.card, borderRadius: 12, textAlign: 'center', border: `1px solid ${C.green}33` }}><p style={{ fontFamily: "'Playfair Display', serif", fontSize: 22, fontWeight: 700, color: C.green, marginBottom: 12 }}>{text}</p><p style={{ fontSize: 16, color: C.dim, margin: 0 }}>{sub}</p></div>); }
+function TrioCard({ icon, title, text, color }: { icon: string; title: string; text: string; color: string }): JSX.Element {  return (<div style={{ padding: 28, borderRadius: 14, background: C.card, border: '1px solid rgba(255,255,255,0.05)', textAlign: 'center', borderTop: `3px solid ${color}` }}><span style={{ fontSize: 36, display: 'block', marginBottom: 16 }}>{icon}</span><div style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700, fontSize: 18, color, marginBottom: 10 }}>{title}</div><p style={{ fontSize: 15, color: C.dim, lineHeight: 1.55, margin: 0 }}>{text}</p></div>); }
 
 const t = {
   eye: { en: 'Opinion · Data · Evolution · Psychology', de: 'Meinung · Daten · Evolution · Psychologie', es: 'Opinión · Datos · Evolución · Psicología' },
@@ -123,7 +125,7 @@ const trioColors = [C.cyan, C.gold, C.green];
 const p = { marginBottom: 24 };
 
 export default function DataMachine() {
-  const [lang, setLang] = useState<'en'|'de'|'es'>('en');
+  const [lang, setLang] = useState<Lang>('en');
   return (
     <div style={{ minHeight: '100vh', background: C.deep, fontFamily: "'Source Sans 3', sans-serif", fontSize: 19, lineHeight: 1.75, color: C.text }}>
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap');
@@ -132,12 +134,12 @@ export default function DataMachine() {
         @keyframes finalePulse{0%,100%{opacity:.3}50%{opacity:.6}}`}</style>
 
       <div style={{ position: 'fixed', top: 20, right: 20, zIndex: 1000, display: 'flex', gap: 8, padding: '8px 12px', background: 'rgba(30,29,47,0.9)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12 }}>
-        {(['en','de','es']).map(l => <button key={l} onClick={() => setLang(l)} style={{ width: 36, height: 26, borderRadius: 6, fontSize: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', border: lang === l ? `2px solid ${C.cyan}` : '2px solid transparent', background: lang === l ? `${C.cyan}1A` : 'rgba(255,255,255,0.05)' }}>{flags[l]}</button>)}
+        {(['en','de','es'] as const).map(l => <button key={l} onClick={() => setLang(l)} style={{ width: 36, height: 26, borderRadius: 6, fontSize: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', border: lang === l ? `2px solid ${C.cyan}` : '2px solid transparent', background: lang === l ? `${C.cyan}1A` : 'rgba(255,255,255,0.05)' }}>{flags[l]}</button>)}
       </div>
 
       <section style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', padding: '60px 24px', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: -200, left: '50%', transform: 'translateX(-50%)', width: 900, height: 900, background: `radial-gradient(circle, ${C.cyan}1F 0%, ${C.violet}0F 40%, transparent 70%)`, pointerEvents: 'none', animation: 'heroPulse 6s ease-in-out infinite' }} />
-        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 13, letterSpacing: 4, textTransform: 'uppercase', color: C.cyan, marginBottom: 32 }}>{L(t.eye, lang)}</div>
+        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 13, letterSpacing: 4, textTransform: 'uppercase' as const, color: C.cyan, marginBottom: 32 }}>{L(t.eye, lang)}</div>
         <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(36px, 6vw, 72px)', fontWeight: 900, lineHeight: 1.05, color: '#fff', maxWidth: 850, margin: 0 }}>
           {L(t.h1a, lang)}{' '}<span style={{ background: `linear-gradient(135deg, ${C.cyan}, ${C.green})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>{L(t.h1b, lang)}</span>{' '}{L(t.h1c, lang)}{' '}<span style={{ background: `linear-gradient(135deg, ${C.crimson}, ${C.gold})`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>{L(t.h1d, lang)}</span>
         </h1>
@@ -148,7 +150,7 @@ export default function DataMachine() {
           <div style={{ fontSize: 14, color: C.dim }}>ONIOKO · 10+ Years in Psychology & Human Cognition</div>
         </div>
         <div style={{ position: 'absolute', bottom: 40, left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: 3, textTransform: 'uppercase', color: C.dim }}>{L(t.scroll, lang)}</span>
+          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: 3, textTransform: 'uppercase' as const, color: C.dim }}>{L(t.scroll, lang)}</span>
           <div style={{ width: 20, height: 20, borderRight: `2px solid ${C.cyan}`, borderBottom: `2px solid ${C.cyan}`, transform: 'rotate(45deg)', animation: 'bounceDown 2s ease-in-out infinite' }} />
         </div>
       </section>

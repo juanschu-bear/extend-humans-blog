@@ -1,18 +1,20 @@
 import { useState } from 'react';
+import type { JSX } from 'react';
 
-const flags = { en: '🇬🇧', de: '🇩🇪', es: '🇪🇸' };
+type Lang = 'en' | 'de' | 'es';
+const flags: Record<Lang, string> = { en: '🇬🇧', de: '🇩🇪', es: '🇪🇸' };
 const C = { deep: '#0F0E17', card: '#1E1D2F', text: '#E0DFF0', dim: '#9896B0', crimson: '#E94560', gold: '#F5C842', cyan: '#2CB6D6', violet: '#A855F7', green: '#34D399', amber: '#F59E0B', rose: '#FB7185' };
-function L(o: Record<string, string>, l: string) { return o[l] || o.en; }
-function PQ({ text, color }: { text: string; color: string }) { return (<div style={{ margin: '56px 0', padding: 40, position: 'relative', textAlign: 'center', borderRadius: 16, border: `1px solid ${color}33`, background: `linear-gradient(135deg, ${color}14, ${color}08)` }}><span style={{ position: 'absolute', top: -10, left: 30, fontFamily: "'Playfair Display', serif", fontSize: 80, lineHeight: 1, opacity: 0.15, color }}>&ldquo;</span><p style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(22px, 3vw, 28px)', fontWeight: 700, fontStyle: 'italic', lineHeight: 1.4, color, margin: 0 }}>{text}</p></div>); }
-function ST({ text, color }: { text: string; color: string }) { return <p style={{ fontSize: 22, fontWeight: 700, color: '#fff', margin: '32px 0', paddingLeft: 20, borderLeft: `3px solid ${color}`, lineHeight: 1.5 }}>{text}</p>; }
-function Sep() { return (<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, margin: '64px 0' }}><div style={{ width: 40, height: 1, background: `${C.violet}4D` }} /><div style={{ width: 6, height: 6, borderRadius: '50%', background: C.violet, opacity: 0.5 }} /><div style={{ width: 40, height: 1, background: `${C.violet}4D` }} /></div>); }
-function SH({ num, title, highlight, color }: { num: string; title: string; highlight: string; color: string }) { return (<div style={{ marginTop: 100, marginBottom: 40 }}><div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, letterSpacing: 3, textTransform: 'uppercase', color: C.violet, marginBottom: 12 }}>{num}</div><h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 700, lineHeight: 1.2, color: '#fff', margin: 0 }}>{title}{' '}<span style={{ background: `linear-gradient(135deg, ${color}, ${color}99)`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>{highlight}</span></h2><div style={{ width: 50, height: 3, marginTop: 20, borderRadius: 2, background: `linear-gradient(90deg, ${color}, ${color}99)` }} /></div>); }
+function L(o: Record<string, string>, l: string): string { return o[l] || o.en; }
+function PQ({ text, color }: { text: string; color: string }): JSX.Element {  return (<div style={{ margin: '56px 0', padding: 40, position: 'relative', textAlign: 'center', borderRadius: 16, border: `1px solid ${color}33`, background: `linear-gradient(135deg, ${color}14, ${color}08)` }}><span style={{ position: 'absolute', top: -10, left: 30, fontFamily: "'Playfair Display', serif", fontSize: 80, lineHeight: 1, opacity: 0.15, color }}>&ldquo;</span><p style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(22px, 3vw, 28px)', fontWeight: 700, fontStyle: 'italic', lineHeight: 1.4, color, margin: 0 }}>{text}</p></div>); }
+function ST({ text, color }: { text: string; color: string }): JSX.Element {  return <p style={{ fontSize: 22, fontWeight: 700, color: '#fff', margin: '32px 0', paddingLeft: 20, borderLeft: `3px solid ${color}`, lineHeight: 1.5 }}>{text}</p>; }
+function Sep(): JSX.Element {  return (<div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, margin: '64px 0' }}><div style={{ width: 40, height: 1, background: `${C.violet}4D` }} /><div style={{ width: 6, height: 6, borderRadius: '50%', background: C.violet, opacity: 0.5 }} /><div style={{ width: 40, height: 1, background: `${C.violet}4D` }} /></div>); }
+function SH({ num, title, highlight, color }: { num: string; title: string; highlight: string; color: string }): JSX.Element {  return (<div style={{ marginTop: 100, marginBottom: 40 }}><div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, letterSpacing: 3, textTransform: 'uppercase' as const, color: C.violet, marginBottom: 12 }}>{num}</div><h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 700, lineHeight: 1.2, color: '#fff', margin: 0 }}>{title}{' '}<span style={{ background: `linear-gradient(135deg, ${color}, ${color}99)`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>{highlight}</span></h2><div style={{ width: 50, height: 3, marginTop: 20, borderRadius: 2, background: `linear-gradient(90deg, ${color}, ${color}99)` }} /></div>); }
 
-function Scenario({ headerColor, headerText, speaker, speakerColor, dialogue, body, analysis }) {
+function Scenario({ headerColor, headerText, speakerColor, speaker, dialogue, body, analysis }: { headerColor: string; headerText: string; speakerColor: string; speaker: string; dialogue: string; body: string; analysis: string }): JSX.Element { 
   return (<div style={{ margin: '24px 0', borderRadius: 16, overflow: 'hidden', border: '1px solid rgba(255,255,255,0.06)' }}>
-    <div style={{ padding: '20px 32px', fontFamily: "'JetBrains Mono', monospace", fontSize: 13, letterSpacing: 2, textTransform: 'uppercase', background: `linear-gradient(135deg, ${headerColor}26, ${headerColor}14)`, color: headerColor }}>{headerText}</div>
+    <div style={{ padding: '20px 32px', fontFamily: "'JetBrains Mono', monospace", fontSize: 13, letterSpacing: 2, textTransform: 'uppercase' as const, background: `linear-gradient(135deg, ${headerColor}26, ${headerColor}14)`, color: headerColor }}>{headerText}</div>
     <div style={{ padding: 32, background: C.card }}>
-      <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 13, letterSpacing: 1, textTransform: 'uppercase', color: speakerColor, display: 'block', marginBottom: 4 }}>{speaker}</span>
+      <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 13, letterSpacing: 1, textTransform: 'uppercase' as const, color: speakerColor, display: 'block', marginBottom: 4 }}>{speaker}</span>
       <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 22, fontStyle: 'italic', color: '#fff', marginBottom: 20, paddingLeft: 16, borderLeft: '2px solid rgba(255,255,255,0.1)' }}>{dialogue}</div>
       <p style={{ marginBottom: 16, fontSize: 18, lineHeight: 1.7 }}>{body}</p>
       <p style={{ fontSize: 16, color: C.dim, padding: '16px 20px', background: 'rgba(255,255,255,0.03)', borderRadius: 8, margin: 0 }}>{analysis}</p>
@@ -20,22 +22,22 @@ function Scenario({ headerColor, headerText, speaker, speakerColor, dialogue, bo
   </div>);
 }
 
-function Versus({ leftLabel, leftTitle, leftText, rightLabel, rightTitle, rightText }) {
+function Versus({ leftLabel, leftTitle, leftText, rightLabel, rightTitle, rightText }: { leftLabel: string; leftTitle: string; leftText: string; rightLabel: string; rightTitle: string; rightText: string }): JSX.Element { 
   return (<div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24, margin: '48px 0' }}>
     <div style={{ padding: 32, borderRadius: 16, background: `linear-gradient(180deg, ${C.violet}1A, ${C.card})`, border: `1px solid ${C.violet}26` }}>
-      <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: 3, textTransform: 'uppercase', color: C.violet, marginBottom: 12 }}>{leftLabel}</div>
+      <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: 3, textTransform: 'uppercase' as const, color: C.violet, marginBottom: 12 }}>{leftLabel}</div>
       <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 20, fontWeight: 700, color: '#fff', marginBottom: 12 }}>{leftTitle}</div>
       <p style={{ fontSize: 16, lineHeight: 1.65, color: C.dim, margin: 0 }}>{leftText}</p>
     </div>
     <div style={{ padding: 32, borderRadius: 16, background: `linear-gradient(180deg, ${C.green}1A, ${C.card})`, border: `1px solid ${C.green}26` }}>
-      <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: 3, textTransform: 'uppercase', color: C.green, marginBottom: 12 }}>{rightLabel}</div>
+      <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: 3, textTransform: 'uppercase' as const, color: C.green, marginBottom: 12 }}>{rightLabel}</div>
       <div style={{ fontFamily: "'Playfair Display', serif", fontSize: 20, fontWeight: 700, color: '#fff', marginBottom: 12 }}>{rightTitle}</div>
       <p style={{ fontSize: 16, lineHeight: 1.65, color: C.dim, margin: 0 }}>{rightText}</p>
     </div>
   </div>);
 }
 
-function Insight({ icon, title, text, color }) { return (<div style={{ margin: '48px 0', padding: '24px 32px', borderRadius: 12, display: 'flex', alignItems: 'flex-start', gap: 20, background: `linear-gradient(135deg, ${color}14, ${color}08)`, border: `1px solid ${color}26` }}><span style={{ fontSize: 28, flexShrink: 0, marginTop: 2 }}>{icon}</span><div style={{ fontSize: 17, lineHeight: 1.65, color: C.text }}><strong style={{ color: '#fff' }}>{title}</strong> {text}</div></div>); }
+function Insight({ icon, title, text, color }: { icon: string; title: string; text: string; color: string }): JSX.Element {  return (<div style={{ margin: '48px 0', padding: '24px 32px', borderRadius: 12, display: 'flex', alignItems: 'flex-start', gap: 20, background: `linear-gradient(135deg, ${color}14, ${color}08)`, border: `1px solid ${color}26` }}><span style={{ fontSize: 28, flexShrink: 0, marginTop: 2 }}>{icon}</span><div style={{ fontSize: 17, lineHeight: 1.65, color: C.text }}><strong style={{ color: '#fff' }}>{title}</strong> {text}</div></div>); }
 
 const t = {
   eye: { en: 'Opinion · Psychology · AI · Cognition', de: 'Meinung · Psychologie · KI · Kognition', es: 'Opinión · Psicología · IA · Cognición' },
@@ -133,7 +135,7 @@ const t = {
 const p = { marginBottom: 24 };
 
 export default function MoreYouLearn() {
-  const [lang, setLang] = useState<'en'|'de'|'es'>('en');
+  const [lang, setLang] = useState<Lang>('en');
   return (
     <div style={{ minHeight: '100vh', background: C.deep, fontFamily: "'Source Sans 3', sans-serif", fontSize: 19, lineHeight: 1.75, color: C.text }}>
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap');
@@ -142,12 +144,12 @@ export default function MoreYouLearn() {
         @keyframes finalePulse{0%,100%{opacity:.3}50%{opacity:.6}}`}</style>
 
       <div style={{ position: 'fixed', top: 20, right: 20, zIndex: 1000, display: 'flex', gap: 8, padding: '8px 12px', background: 'rgba(30,29,47,0.9)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12 }}>
-        {(['en','de','es']).map(l => <button key={l} onClick={() => setLang(l)} style={{ width: 36, height: 26, borderRadius: 6, fontSize: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', border: lang === l ? `2px solid ${C.violet}` : '2px solid transparent', background: lang === l ? `${C.violet}1A` : 'rgba(255,255,255,0.05)' }}>{flags[l]}</button>)}
+        {(['en','de','es'] as const).map(l => <button key={l} onClick={() => setLang(l)} style={{ width: 36, height: 26, borderRadius: 6, fontSize: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer', border: lang === l ? `2px solid ${C.violet}` : '2px solid transparent', background: lang === l ? `${C.violet}1A` : 'rgba(255,255,255,0.05)' }}>{flags[l]}</button>)}
       </div>
 
       <section style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', padding: '60px 24px', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: -200, left: '50%', transform: 'translateX(-50%)', width: 900, height: 900, background: `radial-gradient(circle, ${C.violet}1F 0%, ${C.gold}0F 40%, transparent 70%)`, pointerEvents: 'none', animation: 'heroPulse 6s ease-in-out infinite' }} />
-        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 13, letterSpacing: 4, textTransform: 'uppercase', color: C.violet, marginBottom: 32 }}>{L(t.eye, lang)}</div>
+        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 13, letterSpacing: 4, textTransform: 'uppercase' as const, color: C.violet, marginBottom: 32 }}>{L(t.eye, lang)}</div>
         <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(38px, 6.5vw, 76px)', fontWeight: 900, lineHeight: 1.05, color: '#fff', maxWidth: 850, margin: 0 }}>
           {L(t.h1a, lang)}{' '}<span style={{ background: `linear-gradient(135deg, ${C.violet}, #C084FC)`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>{L(t.h1b, lang)}</span>{' '}{L(t.h1c, lang)}{' '}<span style={{ background: `linear-gradient(135deg, ${C.gold}, #FFD873)`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>{L(t.h1d, lang)}</span>
         </h1>
@@ -158,7 +160,7 @@ export default function MoreYouLearn() {
           <div style={{ fontSize: 14, color: C.dim }}>ONIOKO · 10+ Years in Psychology & Human Cognition</div>
         </div>
         <div style={{ position: 'absolute', bottom: 40, left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: 3, textTransform: 'uppercase', color: C.dim }}>{L(t.scroll, lang)}</span>
+          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: 3, textTransform: 'uppercase' as const, color: C.dim }}>{L(t.scroll, lang)}</span>
           <div style={{ width: 20, height: 20, borderRight: `2px solid ${C.violet}`, borderBottom: `2px solid ${C.violet}`, transform: 'rotate(45deg)', animation: 'bounceDown 2s ease-in-out infinite' }} />
         </div>
       </section>
