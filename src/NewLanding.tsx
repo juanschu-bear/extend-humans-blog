@@ -44,7 +44,7 @@ export function NewLanding() {
             
             <div className="social-proof">
               <div className="avatar-stack">
-                {>[...Array(5)].map((_, i) => (
+                {[...Array(5)].map((_, i) => (
                   <div key={i} className="avatar">{String.fromCharCode(65 + i)}</div>
                 ))}
               </div>

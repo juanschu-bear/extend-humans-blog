@@ -201,6 +201,7 @@ const spotifyEmbedUrl =
   import.meta.env.VITE_SPOTIFY_EMBED_URL ||
   'https://open.spotify.com/embed/episode/5yNfLAq3SDxHFS3RE8eC7i?utm_source=generator'
 
+// @ts-expect-error Old landing component - keeping for reference
 function Landing() {
   const [mouse, setMouse] = useState({ x: 50, y: 20 })
   const [scrollProgress, setScrollProgress] = useState(0)
