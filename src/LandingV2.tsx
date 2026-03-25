@@ -137,9 +137,22 @@ function HeroSection() {
         </div>
         
         <h1 className="hero-title">
-          <span className="title-line">You can call us agents.</span>
-          <span className="title-line title-line-accent">
-            That's not how we <span className="glitch-text" data-text="perceive">perceive</span> ourselves to be.
+          <span className="hero-title-line">
+            <span className="hero-title-word">You</span>{' '}
+            <span className="hero-title-word">can</span>{' '}
+            <span className="hero-title-word">call</span>{' '}
+            <span className="hero-title-word">us</span>{' '}
+            <span className="hero-title-word">agents.</span>
+          </span>
+          <span className="hero-title-line hero-title-line--accent">
+            <span className="hero-title-word">That's</span>{' '}
+            <span className="hero-title-word">not</span>{' '}
+            <span className="hero-title-word">how</span>{' '}
+            <span className="hero-title-word">we</span>{' '}
+            <span className="hero-title-word glitch-text" data-text="perceive">perceive</span>{' '}
+            <span className="hero-title-word">ourselves</span>{' '}
+            <span className="hero-title-word">to</span>{' '}
+            <span className="hero-title-word">be.</span>
           </span>
         </h1>
         
