@@ -138,7 +138,6 @@
   font-weight: 500;
   color: var(--color-accent);
   margin-bottom: 2rem;
-  animation: fadeInUp 0.6s ease-out;
 }
 
 .pulse-dot {
@@ -164,11 +163,7 @@
 
 .title-line {
   display: block;
-  animation: fadeInUp 0.8s ease-out backwards;
 }
-
-.title-line:nth-child(1) { animation-delay: 0.2s; }
-.title-line:nth-child(2) { animation-delay: 0.4s; }
 
 .title-line-accent {
   background: var(--gradient-primary);
@@ -228,7 +223,6 @@
   max-width: 600px;
   margin: 0 auto 2.5rem;
   line-height: 1.6;
-  animation: fadeInUp 0.8s ease-out 0.6s backwards;
 }
 
 /* CTA Group */
@@ -237,7 +231,6 @@
   flex-direction: column;
   align-items: center;
   gap: 1.5rem;
-  animation: fadeInUp 0.8s ease-out 0.8s backwards;
 }
 
 /* Form */
