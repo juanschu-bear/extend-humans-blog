@@ -1,6 +1,8 @@
 // Extended Humans - New Landing Page
 // Full implementation with all animations and effects
 
+import './NewLanding.css'
+
 export function NewLanding() {
   return (
     <div className="new-landing">
