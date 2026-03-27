@@ -72,6 +72,71 @@ function ClickableLibrary(): JSX.Element {
 }
 
 function ArticleShell({ children }: { children: JSX.Element }): JSX.Element {
+  useEffect(() => {
+    const cardSelectors = [
+      'article div[style*="linear-gradient(135deg"]',
+      'article div[style*="border-left"]',
+      'article div[style*="border: 1px solid rgba"]',
+    ]
+
+    const cards = Array.from(document.querySelectorAll<HTMLElement>(cardSelectors.join(',')))
+    cards.forEach((card) => card.classList.add('eh-glow-card'))
+
+    const quoteCandidates = cards.filter((card) => {
+      const text = card.innerText?.trim() ?? ''
+      return text.length > 80 && text.length < 800
+    })
+
+    quoteCandidates.forEach((card) => {
+      if (card.dataset.quoteEnhanced === 'true') return
+      card.dataset.quoteEnhanced = 'true'
+      if (getComputedStyle(card).position === 'static') card.style.position = 'relative'
+
+      const actions = document.createElement('div')
+      actions.className = 'eh-quote-actions'
+
+      const copyButton = document.createElement('button')
+      copyButton.className = 'eh-quote-btn'
+      copyButton.textContent = 'Copy'
+      copyButton.onclick = async () => {
+        const text = (card.innerText || '').trim()
+        if (!text) return
+        await navigator.clipboard.writeText(text)
+        copyButton.textContent = 'Copied'
+        window.setTimeout(() => { copyButton.textContent = 'Copy' }, 1300)
+      }
+
+      const downloadButton = document.createElement('button')
+      downloadButton.className = 'eh-quote-btn'
+      downloadButton.textContent = 'Download'
+      downloadButton.onclick = () => {
+        const text = (card.innerText || '').trim()
+        if (!text) return
+        const blob = new Blob([text], { type: 'text/plain;charset=utf-8' })
+        const url = URL.createObjectURL(blob)
+        const a = document.createElement('a')
+        a.href = url
+        a.download = 'extended-humans-quote.txt'
+        a.click()
+        URL.revokeObjectURL(url)
+      }
+
+      actions.appendChild(copyButton)
+      actions.appendChild(downloadButton)
+      card.appendChild(actions)
+    })
+
+    return () => {
+      cards.forEach((card) => {
+        card.classList.remove('eh-glow-card')
+      })
+      document.querySelectorAll('.eh-quote-actions').forEach((node) => node.remove())
+      quoteCandidates.forEach((card) => {
+        card.dataset.quoteEnhanced = 'false'
+      })
+    }
+  }, [])
+
   return (
     <div className="route-page">
       <Link to="/" className="back-link">Back to Library</Link>

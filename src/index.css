@@ -193,6 +193,48 @@ body {
   font-size: 13px;
 }
 
+.eh-glow-card {
+  transition: box-shadow 0.28s ease, transform 0.28s ease, border-color 0.28s ease;
+}
+
+.eh-glow-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 34px rgba(201, 169, 110, 0.14), 0 0 24px rgba(92, 194, 255, 0.1);
+}
+
+.eh-quote-actions {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  display: flex;
+  gap: 8px;
+  opacity: 0;
+  transform: translateY(-4px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.eh-glow-card:hover .eh-quote-actions {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.eh-quote-btn {
+  border: 1px solid rgba(201, 169, 110, 0.35);
+  background: rgba(13, 16, 25, 0.74);
+  color: #f5ede0;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 10px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 6px 10px;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.eh-quote-btn:hover {
+  box-shadow: 0 0 20px rgba(201, 169, 110, 0.16);
+}
+
 @media (max-width: 760px) {
   .signup-fields-card,
   .signup-fields-footer,
