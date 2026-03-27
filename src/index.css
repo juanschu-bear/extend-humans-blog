@@ -29,3 +29,22 @@ body {
   margin: 0;
   min-width: 320px;
 }
+
+.back-link {
+  position: fixed;
+  top: 16px;
+  left: 16px;
+  z-index: 1200;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  color: #C9A96E;
+  text-decoration: none;
+  opacity: 0.82;
+  transition: opacity 0.2s ease;
+}
+
+.back-link:hover {
+  opacity: 1;
+}

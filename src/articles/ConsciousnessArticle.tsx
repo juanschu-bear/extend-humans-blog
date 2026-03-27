@@ -1,13 +1,11 @@
 import { useState } from 'react';
-import type { JSX } from 'react';
 
 type L = 'en' | 'de' | 'es';
 const flags: Record<L, string> = { en: '\u{1F1EC}\u{1F1E7}', de: '\u{1F1E9}\u{1F1EA}', es: '\u{1F1EA}\u{1F1F8}' };
 
 export default function ConsciousnessArticle() {
   const [lang, setLang] = useState<L>('en');
-  function L(o: Record<string, string>, l: string): string { return o[l] || o.en; }
-  const t = (o: Record<L, string>): string => L(o, lang);
+  const t = (o: Record<L, string>) => o[lang];
 
   // ── Colors ──
   const C = { crimson: '#E94560', gold: '#F5C842', cyan: '#2CB6D6', violet: '#A855F7' };
@@ -17,18 +15,18 @@ export default function ConsciousnessArticle() {
   const dim = '#9896B0';
 
   // ── Reusable inline components ──
-  const PQ = ({ c, children }: { c: string; children: string }): JSX.Element => (
+  const PQ = ({ c, children }: { c: string; children: string }) => (
     <div style={{ margin: '56px 0', padding: 40, position: 'relative', textAlign: 'center', borderRadius: 16, border: `1px solid ${c}33`, background: `linear-gradient(135deg, ${c}14, ${c}08)` }}>
       <span style={{ position: 'absolute', top: -10, left: 30, fontFamily: "'Playfair Display', serif", fontSize: 80, lineHeight: 1, opacity: 0.15, color: c }}>{'\u201C'}</span>
       <p style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(22px, 3vw, 28px)', fontWeight: 700, fontStyle: 'italic', lineHeight: 1.4, color: c, margin: 0 }}>{children}</p>
     </div>
   );
 
-  const ST = ({ c, children }: { c: string; children: string }): JSX.Element => (
+  const ST = ({ c, children }: { c: string; children: string }) => (
     <p style={{ fontSize: 22, fontWeight: 700, color: '#fff', margin: '32px 0', paddingLeft: 20, borderLeft: `3px solid ${c}`, lineHeight: 1.5 }}>{children}</p>
   );
 
-  const SEP = (): JSX.Element => (
+  const SEP = () => (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, margin: '64px 0' }}>
       <div style={{ width: 40, height: 1, background: 'rgba(233,69,96,0.3)' }} />
       <div style={{ width: 6, height: 6, borderRadius: '50%', background: C.crimson, opacity: 0.5 }} />
@@ -36,7 +34,7 @@ export default function ConsciousnessArticle() {
     </div>
   );
 
-  const SH = ({ num, title, hl, c }: { num: string; title: string; hl: string; c: string }): JSX.Element => (
+  const SH = ({ num, title, hl, c }: { num: string; title: string; hl: string; c: string }) => (
     <div style={{ margin: '100px 0 40px' }}>
       <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, letterSpacing: 3, textTransform: 'uppercase' as const, color: C.crimson, marginBottom: 12 }}>{num}</div>
       <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 700, lineHeight: 1.2, color: '#fff', margin: 0 }}>
@@ -46,7 +44,7 @@ export default function ConsciousnessArticle() {
     </div>
   );
 
-  const CARD = ({ label, txt, c }: { label: string; txt: string; c: string }): JSX.Element => (
+  const CARD = ({ label, txt, c }: { label: string; txt: string; c: string }) => (
     <div style={{ background: card, borderRadius: 12, padding: '28px 32px', borderLeft: `3px solid ${c}`, transition: 'transform 0.3s' }}>
       <div style={{ fontFamily: "'Playfair Display', serif", fontWeight: 700, fontSize: 20, marginBottom: 8, color: c }}>{label}</div>
       <p style={{ color: dim, fontSize: 17, lineHeight: 1.6, margin: 0 }}>{txt}</p>

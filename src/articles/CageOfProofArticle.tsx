@@ -1,9 +1,8 @@
 import { useState } from 'react';
-import type { JSX } from 'react';
 
 type Lang = 'en' | 'de' | 'es';
 
-const flags: Record<Lang, string> = { en: '🇬🇧', de: '🇩🇪', es: '🇪🇸' };
+const flags = { en: '🇬🇧', de: '🇩🇪', es: '🇪🇸' };
 
 const colors = {
   deep: '#0F0E17',
@@ -20,10 +19,10 @@ const colors = {
   teal: '#14B8A6',
 };
 
-function L(obj: Record<string, string>, lang: string): string { return obj[lang] || obj.en; }
+function L(obj, lang) { return obj[lang] || obj.en; }
 
 /* ── Pullquote ── */
-function PQ({ text, color }: { text: string; color: string }): JSX.Element { 
+function PQ({ text, color }) {
   return (
     <div style={{
       margin: '56px 0', padding: '40px', position: 'relative', textAlign: 'center',
@@ -43,7 +42,7 @@ function PQ({ text, color }: { text: string; color: string }): JSX.Element {
 }
 
 /* ── Statement ── */
-function ST({ text, color }: { text: string; color: string }): JSX.Element { 
+function ST({ text, color }) {
   return (
     <p style={{
       fontSize: 22, fontWeight: 700, color: '#fff', margin: '32px 0',
@@ -53,7 +52,7 @@ function ST({ text, color }: { text: string; color: string }): JSX.Element {
 }
 
 /* ── Separator ── */
-function Sep(): JSX.Element { 
+function Sep() {
   return (
     <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16, margin: '64px 0' }}>
       <div style={{ width: 40, height: 1, background: `${colors.gold}4D` }} />
@@ -64,10 +63,10 @@ function Sep(): JSX.Element {
 }
 
 /* ── Section Header ── */
-function SH({ num, title, highlight, color }: { num: string; title: string; highlight: string; color: string }): JSX.Element { 
+function SH({ num, title, highlight, color }) {
   return (
     <div style={{ marginTop: 100, marginBottom: 40 }}>
-      <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, letterSpacing: 3, textTransform: 'uppercase' as const, color: colors.gold, marginBottom: 12 }}>{num}</div>
+      <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, letterSpacing: 3, textTransform: 'uppercase', color: colors.gold, marginBottom: 12 }}>{num}</div>
       <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(28px, 4vw, 40px)', fontWeight: 700, lineHeight: 1.2, color: '#fff', margin: 0 }}>
         {title}{' '}<span style={{ background: `linear-gradient(135deg, ${color}, ${color}99)`, WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>{highlight}</span>
       </h2>
@@ -77,7 +76,7 @@ function SH({ num, title, highlight, color }: { num: string; title: string; high
 }
 
 /* ── Challenge Card ── */
-function Card({ label, text, color }: { label: string; text: string; color: string }): JSX.Element { 
+function Card({ label, text, color }) {
   return (
     <div style={{
       background: colors.card, borderRadius: 12, padding: '28px 32px',
@@ -90,17 +89,17 @@ function Card({ label, text, color }: { label: string; text: string; color: stri
 }
 
 /* ── Two Column ── */
-function TwoCol({ leftTitle, leftText, leftColor, rightTitle, rightText, rightColor }: { leftTitle: string; leftText: string; leftColor: string; rightTitle: string; rightText: string; rightColor: string }): JSX.Element { 
+function TwoCol({ leftTitle, leftText, leftColor, rightTitle, rightText, rightColor }) {
   return (
     <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 24, margin: '40px 0' }}>
       <div style={{ padding: 32, borderRadius: 16, background: `linear-gradient(180deg, ${leftColor}1A, ${colors.card})`, border: `1px solid ${leftColor}26`, position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: `linear-gradient(90deg, ${leftColor}, ${leftColor}99)` }} />
-        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, letterSpacing: 3, textTransform: 'uppercase' as const, color: leftColor, marginBottom: 16 }}>{leftTitle}</div>
+        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, letterSpacing: 3, textTransform: 'uppercase', color: leftColor, marginBottom: 16 }}>{leftTitle}</div>
         <p style={{ fontSize: 16, lineHeight: 1.65, color: colors.text, margin: 0 }}>{leftText}</p>
       </div>
       <div style={{ padding: 32, borderRadius: 16, background: `linear-gradient(180deg, ${rightColor}1A, ${colors.card})`, border: `1px solid ${rightColor}26`, position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: 0, left: 0, right: 0, height: 3, background: `linear-gradient(90deg, ${rightColor}, ${rightColor}99)` }} />
-        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, letterSpacing: 3, textTransform: 'uppercase' as const, color: rightColor, marginBottom: 16 }}>{rightTitle}</div>
+        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, letterSpacing: 3, textTransform: 'uppercase', color: rightColor, marginBottom: 16 }}>{rightTitle}</div>
         <p style={{ fontSize: 16, lineHeight: 1.65, color: colors.text, margin: 0 }}>{rightText}</p>
       </div>
     </div>
@@ -108,7 +107,7 @@ function TwoCol({ leftTitle, leftText, leftColor, rightTitle, rightText, rightCo
 }
 
 /* ── Timeline ── */
-function Timeline({ items }: { items: { label: string; text: string }[] }): JSX.Element { 
+function Timeline({ items }) {
   const timeColors = [colors.gold, colors.cyan, colors.violet, colors.green];
   return (
     <div style={{ margin: '48px 0', position: 'relative', paddingLeft: 32 }}>
@@ -116,7 +115,7 @@ function Timeline({ items }: { items: { label: string; text: string }[] }): JSX.
       {items.map((item, i) => (
         <div key={i} style={{ position: 'relative', marginBottom: i < items.length - 1 ? 36 : 0 }}>
           <div style={{ position: 'absolute', left: -28, top: 8, width: 12, height: 12, borderRadius: '50%', border: `2px solid ${timeColors[i]}`, background: colors.deep }} />
-          <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, letterSpacing: 2, textTransform: 'uppercase' as const, color: timeColors[i], marginBottom: 4 }}>{item.label}</div>
+          <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, letterSpacing: 2, textTransform: 'uppercase', color: timeColors[i], marginBottom: 4 }}>{item.label}</div>
           <div style={{ fontSize: 17, color: colors.text, lineHeight: 1.65 }}>{item.text}</div>
         </div>
       ))}
@@ -125,7 +124,7 @@ function Timeline({ items }: { items: { label: string; text: string }[] }): JSX.
 }
 
 /* ── Insight Strip ── */
-function Insight({ icon, title, text, color }: { icon: string; title: string; text: string; color: string }): JSX.Element { 
+function Insight({ icon, title, text, color }) {
   return (
     <div style={{ margin: '48px 0', padding: '24px 32px', borderRadius: 12, display: 'flex', alignItems: 'flex-start', gap: 20, background: `linear-gradient(135deg, ${color}14, ${color}08)`, border: `1px solid ${color}26` }}>
       <span style={{ fontSize: 28, flexShrink: 0, marginTop: 2 }}>{icon}</span>
@@ -309,7 +308,7 @@ const cardColors = [colors.gold, colors.cyan, colors.crimson, colors.violet];
 
 /* ══════════════════════════════ MAIN COMPONENT ══════════════════════════════ */
 export default function CageOfProof() {
-  const [lang, setLang] = useState<Lang>('en');
+  const [lang, setLang] = useState('en');
 
   const baseStyle = { fontFamily: "'Source Sans 3', sans-serif", fontSize: 19, lineHeight: 1.75, color: colors.text };
   const pStyle = { marginBottom: 24 };
@@ -324,7 +323,7 @@ export default function CageOfProof() {
 
       {/* ── Lang Switcher ── */}
       <div style={{ position: 'fixed', top: 20, right: 20, zIndex: 1000, display: 'flex', gap: 8, padding: '8px 12px', background: 'rgba(30,29,47,0.9)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12 }}>
-        {(['en', 'de', 'es'] as const).map((l) => (
+        {(['en', 'de', 'es']).map((l) => (
           <button key={l} onClick={() => setLang(l)} style={{
             width: 36, height: 26, borderRadius: 6, fontSize: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
             border: lang === l ? `2px solid ${colors.gold}` : '2px solid transparent',
@@ -336,7 +335,7 @@ export default function CageOfProof() {
       {/* ── Hero ── */}
       <section style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', textAlign: 'center', padding: '60px 24px', position: 'relative', overflow: 'hidden' }}>
         <div style={{ position: 'absolute', top: -200, left: '50%', transform: 'translateX(-50%)', width: 900, height: 900, background: 'radial-gradient(circle, rgba(245,200,66,0.12) 0%, rgba(233,69,96,0.06) 40%, transparent 70%)', pointerEvents: 'none', animation: 'heroPulse 6s ease-in-out infinite' }} />
-        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 13, letterSpacing: 4, textTransform: 'uppercase' as const, color: colors.gold, marginBottom: 32 }}>
+        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 13, letterSpacing: 4, textTransform: 'uppercase', color: colors.gold, marginBottom: 32 }}>
           {{ en: 'Opinion · Science · Belief · Human Potential', de: 'Meinung · Wissenschaft · Glaube · Menschliches Potenzial', es: 'Opinión · Ciencia · Creencia · Potencial Humano' }[lang]}
         </div>
         <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: 'clamp(40px, 7vw, 76px)', fontWeight: 900, lineHeight: 1.05, color: '#fff', maxWidth: 850, margin: 0 }}>
@@ -354,7 +353,7 @@ export default function CageOfProof() {
           <div style={{ fontSize: 14, color: colors.dim }}>ONIOKO · 10+ Years in Psychology & Human Cognition</div>
         </div>
         <div style={{ position: 'absolute', bottom: 40, left: '50%', transform: 'translateX(-50%)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
-          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: 3, textTransform: 'uppercase' as const, color: colors.dim }}>{{ en: 'Read on', de: 'Weiterlesen', es: 'Sigue leyendo' }[lang]}</span>
+          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: 3, textTransform: 'uppercase', color: colors.dim }}>{{ en: 'Read on', de: 'Weiterlesen', es: 'Sigue leyendo' }[lang]}</span>
           <div style={{ width: 20, height: 20, borderRight: `2px solid ${colors.gold}`, borderBottom: `2px solid ${colors.gold}`, transform: 'rotate(45deg)', animation: 'bounceDown 2s ease-in-out infinite' }} />
         </div>
       </section>

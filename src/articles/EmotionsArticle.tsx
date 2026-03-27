@@ -1,5 +1,4 @@
-import { useState, useEffect, useRef } from 'react';
-import type { JSX } from 'react';
+import { useState, useEffect, useRef, type JSX } from 'react';
 
 type Lang = 'en' | 'de' | 'es';
 
