@@ -20,7 +20,7 @@ const copy = {
   en: {
     name: 'Your name',
     email: 'Your email',
-    joinLibrary: 'Join the Library',
+    joinLibrary: 'Get Early Access',
     join: 'Join',
     success: "You're in. Welcome to the library.",
     error: 'Something went wrong. Try again.',
@@ -28,7 +28,7 @@ const copy = {
   de: {
     name: 'Dein Name',
     email: 'Deine Email',
-    joinLibrary: 'Der Bibliothek beitreten',
+    joinLibrary: 'Früher Zugang',
     join: 'Beitreten',
     success: 'Du bist dabei. Willkommen in der Bibliothek.',
     error: 'Etwas ist schiefgelaufen. Versuch es erneut.',
@@ -36,7 +36,7 @@ const copy = {
   es: {
     name: 'Tu nombre',
     email: 'Tu email',
-    joinLibrary: 'Unirte a la biblioteca',
+    joinLibrary: 'Acceso anticipado',
     join: 'Unirte',
     success: 'Estás dentro. Bienvenido a la biblioteca.',
     error: 'Algo salió mal. Inténtalo de nuevo.',

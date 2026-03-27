@@ -86,6 +86,7 @@ function ArticleRow({ article, lang, index }: { article: typeof articles[0]; lan
 export default function ExtendedHumansLibrary(): JSX.Element {
   const [lang, setLang] = useState<Lang>('en');
   const dustRef = useRef<HTMLDivElement>(null);
+  const [countdownText, setCountdownText] = useState('00d 00h 00m');
 
   const tx = (o: Record<Lang, string>): string => o[lang];
 
@@ -98,6 +99,20 @@ export default function ExtendedHumansLibrary(): JSX.Element {
       p.style.cssText = `position:absolute;width:${1 + Math.random() * 2}px;height:${1 + Math.random() * 2}px;border-radius:50%;background:#C9A96E;opacity:0;left:${Math.random() * 100}%;animation:dustFloat ${12 + Math.random() * 20}s linear ${Math.random() * 15}s infinite`;
       container.appendChild(p);
     }
+  }, []);
+
+  useEffect(() => {
+    const target = new Date('2026-04-15T00:00:00+02:00').getTime();
+    const tick = () => {
+      const delta = Math.max(0, target - Date.now());
+      const days = Math.floor(delta / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((delta / (1000 * 60 * 60)) % 24);
+      const minutes = Math.floor((delta / (1000 * 60)) % 60);
+      setCountdownText(`${String(days).padStart(2, '0')}d ${String(hours).padStart(2, '0')}h ${String(minutes).padStart(2, '0')}m`);
+    };
+    tick();
+    const timer = window.setInterval(tick, 30000);
+    return () => window.clearInterval(timer);
   }, []);
 
   return (
@@ -268,8 +283,11 @@ export default function ExtendedHumansLibrary(): JSX.Element {
               es: "Una exploraci\u00f3n profunda que va m\u00e1s all\u00e1 de cualquier art\u00edculo anterior. El manifiesto. La filosof\u00eda. El argumento de por qu\u00e9 la pr\u00f3xima versi\u00f3n de ti no es ciencia ficci\u00f3n.",
             })}
           </p>
-          <div className="essay-event-date" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: '#D4A44E', letterSpacing: 3 }}>
-            {tx({ en: 'April 15, 2026', de: '15. April 2026', es: '15 de abril de 2026' })}
+          <div className="essay-event-footer">
+            <div className="essay-event-date" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: '#D4A44E', letterSpacing: 3 }}>
+              {tx({ en: 'April 15, 2026', de: '15. April 2026', es: '15 de abril de 2026' })}
+            </div>
+            <div className="essay-countdown">{countdownText}</div>
           </div>
         </div>
       </section>
@@ -282,11 +300,11 @@ export default function ExtendedHumansLibrary(): JSX.Element {
       </div>
 
       {/* ═══ PODCAST ═══ */}
-      <section style={{ maxWidth: 900, margin: '0 auto', padding: '0 48px' }}>
-        <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: 6, textTransform: 'uppercase' as const, color: '#6E6555', marginBottom: 24 }}>
+      <section className="podcast-callout" style={{ maxWidth: 900, margin: '0 auto', padding: '0 48px' }}>
+        <div className="podcast-eyebrow" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: 6, textTransform: 'uppercase' as const, color: '#6E6555', marginBottom: 24 }}>
           {tx({ en: 'Podcast \u00b7 In Development', de: 'Podcast \u00b7 In Entwicklung', es: 'Podcast \u00b7 En desarrollo' })}
         </div>
-        <p style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(20px,2.5vw,28px)', fontStyle: 'italic', fontWeight: 400, color: 'rgba(245,237,224,0.4)', lineHeight: 1.4 }}>
+        <p className="podcast-line" style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(20px,2.5vw,28px)', fontStyle: 'italic', fontWeight: 400, color: 'rgba(245,237,224,0.4)', lineHeight: 1.4 }}>
           {tx({
             en: "Conversations about the things nobody is willing to say out loud. Coming to the library soon.",
             de: "Gespr\u00e4che \u00fcber die Dinge, die niemand laut auszusprechen bereit ist. Bald in der Bibliothek.",
@@ -297,15 +315,15 @@ export default function ExtendedHumansLibrary(): JSX.Element {
 
       {/* ═══ FOOTER ═══ */}
       <footer className="footer-premium" style={{ padding: '80px 48px 48px', borderTop: '1px solid rgba(201,169,110,0.1)', textAlign: 'center' as const, marginTop: 120 }}>
-        <div style={{ maxWidth: 900, margin: '0 auto', padding: '80px 0', textAlign: 'center' as const }}>
+        <div className="footer-loop-block" style={{ maxWidth: 900, margin: '0 auto', padding: '80px 0', textAlign: 'center' as const }}>
           <p className="footer-loop-title" style={{ marginTop: 0, marginBottom: 10, fontFamily: "'Cormorant Garamond', serif", fontSize: 28, fontStyle: 'italic', color: '#C9A96E' }}>
             {tx({ en: 'Stay in the loop.', de: 'Bleib auf dem Laufenden.', es: 'Mantente al tanto.' })}
           </p>
           <p style={{ marginTop: 0, marginBottom: 24, fontFamily: "'Source Sans 3', sans-serif", fontSize: 14, color: '#8B8070' }}>
             {tx({
-              en: 'Every new thought, delivered to you.',
-              de: 'Jeder neue Gedanke, direkt zu dir.',
-              es: 'Cada nuevo pensamiento, directo a ti.',
+              en: 'Every new step to become extended, delivered to you.',
+              de: 'Jeder neue Schritt, um erweitert zu werden, direkt zu dir.',
+              es: 'Cada nuevo paso para volverte extendido, directo a ti.',
             })}
           </p>
           <SignupForm lang={lang} mode="footer" />
