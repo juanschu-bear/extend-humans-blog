@@ -173,13 +173,13 @@ export default function ExtendedHumansLibrary(): JSX.Element {
           </p>
 
           <div style={{ opacity: 0, animation: 'fadeIn 1s ease 1.7s forwards' }}>
-            <a href="#stacks" className="premium-btn premium-btn-hero">
+            <a href="#stacks" className="premium-btn premium-btn-primary premium-btn-hero">
               {tx({ en: 'Access the Knowledge', de: 'Zugang zum Wissen', es: 'Accede al conocimiento' })}
             </a>
           </div>
 
           <div style={{ width: 60, height: 1, background: 'rgba(201,169,110,0.3)', margin: '40px auto 0', opacity: 0, animation: 'fadeIn 1s ease 1.8s forwards' }} />
-          <p style={{ marginTop: 14, fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: 2, color: '#6E6555', maxWidth: 680, marginLeft: 'auto', marginRight: 'auto', opacity: 0, animation: 'fadeIn 1s ease 1.85s forwards' }}>
+          <p style={{ marginTop: 40, fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: 2, color: '#6E6555', maxWidth: 680, marginLeft: 'auto', marginRight: 'auto', opacity: 0, animation: 'fadeIn 1s ease 1.85s forwards' }}>
             {tx({
               en: 'New articles, the essay, and the podcast. Delivered when they drop.',
               de: 'Neue Artikel, das Essay und der Podcast. Direkt wenn sie erscheinen.',
@@ -187,11 +187,11 @@ export default function ExtendedHumansLibrary(): JSX.Element {
             })}
           </p>
 
-          <a href="#subscribe" className="cta-subtle-link" style={{ opacity: 0, animation: 'fadeIn 1s ease 1.9s forwards' }}>
+          <a href="#subscribe" className="premium-btn premium-btn-secondary cta-subtle-link" style={{ opacity: 0, animation: 'fadeIn 1s ease 1.9s forwards' }}>
             {tx({ en: 'Get Early Access →', de: 'Früher Zugang →', es: 'Acceso anticipado →' })}
           </a>
 
-          <div style={{ marginTop: 48, display: 'flex', flexDirection: 'column' as const, alignItems: 'center' as const, gap: 8, opacity: 0, animation: 'fadeIn 1s ease 2s forwards' }}>
+          <div style={{ marginTop: 40, display: 'flex', flexDirection: 'column' as const, alignItems: 'center' as const, gap: 8, opacity: 0, animation: 'fadeIn 1s ease 2s forwards' }}>
             <div style={{ width: 40, height: 1, background: 'rgba(201,169,110,0.2)', marginBottom: 8 }} />
             <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: 4, color: '#6E6555', textTransform: 'uppercase' as const }}>Juan Schubert</span>
             <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: 4, color: '#6E6555', textTransform: 'uppercase' as const }}>ONIOKO</span>

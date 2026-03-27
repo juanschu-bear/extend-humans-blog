@@ -100,7 +100,7 @@ export default function SignupForm({ lang, mode = 'card' }: SignupFormProps): JS
             placeholder={t.email}
             required
           />
-          <button type="submit" className="premium-btn premium-btn-small">
+          <button type="submit" className="premium-btn premium-btn-secondary premium-btn-small">
             {status === 'loading' ? '...' : t.join}
           </button>
         </div>
@@ -131,7 +131,7 @@ export default function SignupForm({ lang, mode = 'card' }: SignupFormProps): JS
         />
       </div>
 
-      <button type="submit" className="premium-btn premium-btn-small">
+      <button type="submit" className="premium-btn premium-btn-primary premium-btn-small">
         {status === 'loading' ? '...' : mode === 'card' ? t.joinLibrary : t.join}
       </button>
 
