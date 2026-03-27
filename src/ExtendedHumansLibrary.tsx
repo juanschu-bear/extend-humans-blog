@@ -125,6 +125,13 @@ export default function ExtendedHumansLibrary(): JSX.Element {
         @keyframes fadeIn{from{opacity:0}to{opacity:1}}
         @keyframes slideUp{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
         @keyframes scrollBreath{0%,100%{opacity:.2;height:28px}50%{opacity:.6;height:36px}}
+        @keyframes footerAppealIn{0%{opacity:0;transform:translateY(28px) scale(.985);filter:blur(4px)}100%{opacity:1;transform:translateY(0) scale(1);filter:blur(0)}}
+        @keyframes footerHeadlinePulse{0%,100%{text-shadow:0 0 18px rgba(201,169,110,.16),0 0 32px rgba(76,132,255,.08);transform:translateZ(0) scale(1)}50%{text-shadow:0 0 28px rgba(201,169,110,.28),0 0 54px rgba(92,152,255,.18);transform:translateZ(0) scale(1.02)}}
+        .footer-loop-block{position:relative;overflow:hidden;opacity:0;animation:footerAppealIn 1s cubic-bezier(.16,1,.3,1) .15s forwards}
+        .footer-loop-block::before{content:'';position:absolute;left:50%;top:-80px;transform:translateX(-50%);width:min(840px,100%);height:280px;background:radial-gradient(ellipse at 50% 0%, rgba(90,145,255,.15), rgba(201,169,110,.08) 42%, transparent 72%);pointer-events:none;filter:blur(4px)}
+        .footer-loop-block::after{content:'';position:absolute;inset:-1px;border-radius:18px;border:1px solid rgba(201,169,110,.12);box-shadow:0 0 36px rgba(90,145,255,.12), inset 0 0 28px rgba(201,169,110,.04);pointer-events:none}
+        .footer-loop-title{font-size:clamp(36px,5.2vw,58px)!important;line-height:1.02;letter-spacing:.01em;text-shadow:0 0 20px rgba(201,169,110,.2),0 0 36px rgba(92,152,255,.1);animation:footerHeadlinePulse 4.8s ease-in-out .9s infinite}
+        .footer-loop-subtitle{font-size:clamp(18px,2.1vw,26px)!important;line-height:1.35;color:#9a8f7d!important;text-shadow:0 0 22px rgba(76,132,255,.1)}
         ::selection{background:#C9A96E;color:#0B0A0F}
       `}</style>
 
@@ -327,7 +334,7 @@ export default function ExtendedHumansLibrary(): JSX.Element {
           <p className="footer-loop-title" style={{ marginTop: 0, marginBottom: 10, fontFamily: "'Cormorant Garamond', serif", fontSize: 28, fontStyle: 'italic', color: '#C9A96E' }}>
             {tx({ en: 'Stay in the loop.', de: 'Bleib auf dem Laufenden.', es: 'Mantente al tanto.' })}
           </p>
-          <p style={{ marginTop: 0, marginBottom: 24, fontFamily: "'Source Sans 3', sans-serif", fontSize: 14, color: '#8B8070' }}>
+          <p className="footer-loop-subtitle" style={{ marginTop: 0, marginBottom: 30, fontFamily: "'Source Sans 3', sans-serif", fontSize: 14, color: '#8B8070' }}>
             {tx({
               en: 'Every new step to become extended, delivered to you.',
               de: 'Jeder neue Schritt, um erweitert zu werden, direkt zu dir.',
