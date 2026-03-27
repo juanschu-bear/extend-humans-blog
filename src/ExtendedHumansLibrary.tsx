@@ -30,10 +30,13 @@ function ArticleRow({ article, lang, index }: { article: typeof articles[0]; lan
 
   return (
     <div
-      className="eh-shell-padding"
+      className="eh-article-row eh-shell-padding"
       ref={ref}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
+      onTouchStart={() => setHovered(true)}
+      onTouchEnd={() => setHovered(false)}
+      onTouchCancel={() => setHovered(false)}
       style={{
         maxWidth: 900, margin: '0 auto', padding: '0 48px', cursor: 'pointer',
         opacity: visible ? 1 : 0, transform: visible ? 'translateY(0)' : 'translateY(24px)',
@@ -144,7 +147,7 @@ export default function ExtendedHumansLibrary(): JSX.Element {
       <div ref={dustRef} style={{ position: 'fixed' as const, inset: 0, pointerEvents: 'none' as const, zIndex: 1, overflow: 'hidden' as const }} />
 
       {/* Lang Switcher */}
-      <div style={{ position: 'fixed' as const, top: 24, right: 24, zIndex: 10000, display: 'flex', gap: 4, opacity: 0, animation: 'fadeIn 1s ease 2.5s forwards' }}>
+      <div className="eh-lang-switcher" style={{ position: 'fixed' as const, top: 24, right: 24, zIndex: 10000, display: 'flex', gap: 4, opacity: 0, animation: 'fadeIn 1s ease 2.5s forwards' }}>
         {(['en', 'de', 'es'] as Lang[]).map((l) => (
           <button key={l} onClick={() => setLang(l)} style={{
             fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: 2, padding: '6px 10px',
@@ -173,7 +176,7 @@ export default function ExtendedHumansLibrary(): JSX.Element {
         <div style={{ position: 'absolute' as const, right: 'max(8%,40px)', top: 0, width: 1, height: '100%', background: 'linear-gradient(180deg, transparent, rgba(201,169,110,0.1), rgba(201,169,110,0.03), transparent)', pointerEvents: 'none' as const, opacity: 0, animation: 'fadeIn 2s ease 0.7s forwards' }} />
 
         {/* Content */}
-        <div style={{ position: 'relative' as const, zIndex: 10, padding: '40px 24px' }}>
+        <div className="eh-hero-content" style={{ position: 'relative' as const, zIndex: 10, padding: '40px 24px' }}>
           <div style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: 8, textTransform: 'uppercase' as const, color: '#6E6555', marginBottom: 56, opacity: 0, animation: 'fadeIn 1s ease 0.5s forwards' }}>
             {tx({ en: 'A Library for the Future of Being', de: 'Eine Bibliothek f\u00fcr die Zukunft des Seins', es: 'Una biblioteca para el futuro del ser' })}
           </div>
