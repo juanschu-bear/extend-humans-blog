@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 const flags = { en: '🇬🇧', de: '🇩🇪', es: '🇪🇸' };
 const C = { deep: '#0F0E17', card: '#1E1D2F', text: '#E0DFF0', dim: '#9896B0', crimson: '#E94560', gold: '#F5C842', cyan: '#2CB6D6', violet: '#A855F7', green: '#34D399' };
@@ -123,7 +123,14 @@ const trioColors = [C.cyan, C.gold, C.green];
 const p = { marginBottom: 24 };
 
 export default function DataMachine() {
-  const [lang, setLang] = useState<'en'|'de'|'es'>('en');
+  const [lang, setLang] = useState<'en'|'de'|'es'>(() => {
+    const saved = typeof window !== 'undefined' ? window.localStorage.getItem('eh:lang') : null;
+    return saved === 'de' || saved === 'es' || saved === 'en' ? saved : 'en';
+  });
+  useEffect(() => {
+    window.localStorage.setItem('eh:lang', lang);
+    window.dispatchEvent(new Event('eh:lang-change'));
+  }, [lang]);
   return (
     <div style={{ minHeight: '100vh', background: C.deep, fontFamily: "'Source Sans 3', sans-serif", fontSize: 19, lineHeight: 1.75, color: C.text }}>
       <style>{`@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Source+Sans+3:ital,wght@0,300;0,400;0,600;0,700;1,400&family=JetBrains+Mono:wght@400;600&display=swap');

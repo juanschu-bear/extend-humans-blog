@@ -1,11 +1,19 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type L = 'en' | 'de' | 'es';
 const flags: Record<L, string> = { en: '\u{1F1EC}\u{1F1E7}', de: '\u{1F1E9}\u{1F1EA}', es: '\u{1F1EA}\u{1F1F8}' };
 
 export default function ConsciousnessArticle() {
-  const [lang, setLang] = useState<L>('en');
+  const [lang, setLang] = useState<L>(() => {
+    const saved = typeof window !== 'undefined' ? window.localStorage.getItem('eh:lang') : null;
+    return saved === 'de' || saved === 'es' || saved === 'en' ? saved : 'en';
+  });
   const t = (o: Record<L, string>) => o[lang];
+
+  useEffect(() => {
+    window.localStorage.setItem('eh:lang', lang);
+    window.dispatchEvent(new Event('eh:lang-change'));
+  }, [lang]);
 
   // ── Colors ──
   const C = { crimson: '#E94560', gold: '#F5C842', cyan: '#2CB6D6', violet: '#A855F7' };

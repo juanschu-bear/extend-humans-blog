@@ -3,7 +3,10 @@ import { useState, useEffect, useRef, type JSX } from 'react';
 type Lang = 'en' | 'de' | 'es';
 
 export default function EmotionsArticle(): JSX.Element {
-  const [lang, setLang] = useState<Lang>('en');
+  const [lang, setLang] = useState<Lang>(() => {
+    const saved = typeof window !== 'undefined' ? window.localStorage.getItem('eh:lang') : null;
+    return saved === 'de' || saved === 'es' || saved === 'en' ? saved : 'en';
+  });
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -11,6 +14,11 @@ export default function EmotionsArticle(): JSX.Element {
     containerRef.current.querySelectorAll('[data-lang]').forEach((el) => {
       (el as HTMLElement).style.display = el.getAttribute('data-lang') === lang ? '' : 'none';
     });
+  }, [lang]);
+
+  useEffect(() => {
+    window.localStorage.setItem('eh:lang', lang);
+    window.dispatchEvent(new Event('eh:lang-change'));
   }, [lang]);
 
   const flags: Record<Lang, string> = { en: '\u{1F1EC}\u{1F1E7}', de: '\u{1F1E9}\u{1F1EA}', es: '\u{1F1EA}\u{1F1F8}' };

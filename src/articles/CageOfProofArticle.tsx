@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 type Lang = 'en' | 'de' | 'es';
 
@@ -308,7 +308,15 @@ const cardColors = [colors.gold, colors.cyan, colors.crimson, colors.violet];
 
 /* ══════════════════════════════ MAIN COMPONENT ══════════════════════════════ */
 export default function CageOfProof() {
-  const [lang, setLang] = useState('en');
+  const [lang, setLang] = useState<Lang>(() => {
+    const saved = typeof window !== 'undefined' ? window.localStorage.getItem('eh:lang') : null;
+    return saved === 'de' || saved === 'es' || saved === 'en' ? saved : 'en';
+  });
+
+  useEffect(() => {
+    window.localStorage.setItem('eh:lang', lang);
+    window.dispatchEvent(new Event('eh:lang-change'));
+  }, [lang]);
 
   const baseStyle = { fontFamily: "'Source Sans 3', sans-serif", fontSize: 19, lineHeight: 1.75, color: colors.text };
   const pStyle = { marginBottom: 24 };
@@ -323,7 +331,7 @@ export default function CageOfProof() {
 
       {/* ── Lang Switcher ── */}
       <div style={{ position: 'fixed', top: 20, right: 20, zIndex: 1000, display: 'flex', gap: 8, padding: '8px 12px', background: 'rgba(30,29,47,0.9)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.08)', borderRadius: 12 }}>
-        {(['en', 'de', 'es']).map((l) => (
+        {(['en', 'de', 'es'] as Lang[]).map((l) => (
           <button key={l} onClick={() => setLang(l)} style={{
             width: 36, height: 26, borderRadius: 6, fontSize: 18, display: 'flex', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
             border: lang === l ? `2px solid ${colors.gold}` : '2px solid transparent',

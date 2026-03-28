@@ -186,6 +186,10 @@ function ArticleEngagement({ articleKey }: { articleKey: string }): JSX.Element 
   const [replyDrafts, setReplyDrafts] = useState<Record<string, { name: string; text: string; open: boolean }>>({})
   const [name, setName] = useState('')
   const [commentText, setCommentText] = useState('')
+  const [editingCommentId, setEditingCommentId] = useState<string | null>(null)
+  const [editName, setEditName] = useState('')
+  const [editText, setEditText] = useState('')
+  const [editRating, setEditRating] = useState(4)
   const [uiLang, setUiLang] = useState<'en' | 'de' | 'es'>(() => {
     const saved = typeof window !== 'undefined' ? window.localStorage.getItem('eh:lang') : null
     if (saved === 'de' || saved === 'es' || saved === 'en') return saved
@@ -228,7 +232,9 @@ function ArticleEngagement({ articleKey }: { articleKey: string }): JSX.Element 
         Array.isArray(parsed.comments)
           ? parsed.comments.map((comment) => ({
             ...comment,
-            rating: typeof comment.rating === 'number' ? comment.rating : 0,
+            rating: typeof comment.rating === 'number' && comment.rating > 0
+              ? comment.rating
+              : (typeof parsed.userRating === 'number' && parsed.userRating > 0 ? parsed.userRating : 4),
             replies: Array.isArray(comment.replies) ? comment.replies : [],
           }))
           : [],
@@ -351,7 +357,7 @@ function ArticleEngagement({ articleKey }: { articleKey: string }): JSX.Element 
     const trimmedText = commentText.trim()
     if (trimmedText.length < 2) return
 
-    const trimmedName = name.trim() || 'Anonymous'
+    const trimmedName = name.trim() || t({ en: 'Anonymous', de: 'Anonym', es: 'Anónimo' })
     const newComment: EngagementComment = {
       id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
       name: trimmedName,
@@ -364,6 +370,56 @@ function ArticleEngagement({ articleKey }: { articleKey: string }): JSX.Element 
     setComments((prev) => [newComment, ...prev])
     setCommentText('')
     setVisibleCount(4)
+  }
+
+  const startEditing = (comment: EngagementComment) => {
+    setEditingCommentId(comment.id)
+    setEditName(comment.name)
+    setEditText(comment.text)
+    setEditRating(comment.rating > 0 ? comment.rating : 4)
+  }
+
+  const cancelEditing = () => {
+    setEditingCommentId(null)
+    setEditName('')
+    setEditText('')
+    setEditRating(4)
+  }
+
+  const saveEditing = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault()
+    if (!editingCommentId) return
+    const text = editText.trim()
+    if (text.length < 2) return
+
+    setComments((prev) => prev.map((comment) => (
+      comment.id === editingCommentId
+        ? {
+          ...comment,
+          name: editName.trim() || t({ en: 'Anonymous', de: 'Anonym', es: 'Anónimo' }),
+          text,
+          rating: editRating,
+        }
+        : comment
+    )))
+    cancelEditing()
+  }
+
+  const deleteComment = (commentId: string) => {
+    setComments((prev) => prev.filter((comment) => comment.id !== commentId))
+    setLikedCommentIds((prev) => prev.filter((id) => id !== commentId))
+    setLikedReplyIds((prev) => prev.filter((id) => !id.startsWith(`${commentId}:`)))
+    setExpandedReplies((prev) => {
+      const clone = { ...prev }
+      delete clone[commentId]
+      return clone
+    })
+    setReplyDrafts((prev) => {
+      const clone = { ...prev }
+      delete clone[commentId]
+      return clone
+    })
+    if (editingCommentId === commentId) cancelEditing()
   }
 
   return (
@@ -381,6 +437,7 @@ function ArticleEngagement({ articleKey }: { articleKey: string }): JSX.Element 
             {averageRating > 0 ? `${averageRating.toFixed(1)}/5` : '0.0/5'} · {comments.filter((c) => c.rating > 0).length}{' '}
             {t({ en: 'ratings', de: 'Bewertungen', es: 'valoraciones' })}
           </div>
+          <span className="article-rating-question">{t({ en: 'How many stars?', de: 'Wie viele Sterne?', es: '¿Cuántas estrellas?' })}</span>
           <div className="article-stars" role="radiogroup" aria-label="Rate article">
             {[1, 2, 3, 4, 5].map((star) => (
               <button
@@ -442,11 +499,41 @@ function ArticleEngagement({ articleKey }: { articleKey: string }): JSX.Element 
                 <div className="article-comment-head">
                   <strong>
                     {comment.name}
-                    <span className="comment-rating">{' · '}{comment.rating > 0 ? '★'.repeat(comment.rating) : t({ en: 'no rating', de: 'keine Bewertung', es: 'sin valoración' })}</span>
+                    <span className="comment-rating">{' · '}{'★'.repeat(comment.rating > 0 ? comment.rating : 4)}</span>
                   </strong>
                   <span>{new Date(comment.createdAt).toLocaleString()}</span>
                 </div>
-                <p>{comment.text}</p>
+                {editingCommentId === comment.id ? (
+                  <form className="article-reply-form" onSubmit={saveEditing}>
+                    <input
+                      type="text"
+                      maxLength={50}
+                      value={editName}
+                      onChange={(event) => setEditName(event.target.value)}
+                      placeholder={t({ en: 'Your name (optional)', de: 'Dein Name (optional)', es: 'Tu nombre (opcional)' })}
+                    />
+                    <textarea
+                      value={editText}
+                      onChange={(event) => setEditText(event.target.value)}
+                      rows={4}
+                      required
+                    />
+                    <div className="article-edit-stars">
+                      <span>{t({ en: 'Rating', de: 'Bewertung', es: 'Valoración' })}</span>
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <button key={star} type="button" className={`article-comment-like ${star <= editRating ? 'is-active' : ''}`} onClick={() => setEditRating(star)}>
+                          {'★'}
+                        </button>
+                      ))}
+                    </div>
+                    <div className="article-comment-actions">
+                      <button type="submit" className="article-comment-like">{t({ en: 'Save', de: 'Speichern', es: 'Guardar' })}</button>
+                      <button type="button" className="article-comment-like" onClick={cancelEditing}>{t({ en: 'Cancel', de: 'Abbrechen', es: 'Cancelar' })}</button>
+                    </div>
+                  </form>
+                ) : (
+                  <p>{comment.text}</p>
+                )}
                 <div className="article-comment-actions">
                   <button type="button" onClick={() => toggleCommentLike(comment.id)} className={`article-comment-like ${liked ? 'is-active' : ''}`}>
                     {liked
@@ -460,6 +547,12 @@ function ArticleEngagement({ articleKey }: { articleKey: string }): JSX.Element 
                     {repliesOpen
                       ? t({ en: 'Hide replies', de: 'Antworten ausblenden', es: 'Ocultar respuestas' })
                       : t({ en: 'Show replies', de: 'Antworten anzeigen', es: 'Ver respuestas' })} · {comment.replies.length}
+                  </button>
+                  <button type="button" onClick={() => startEditing(comment)} className="article-comment-like">
+                    {t({ en: 'Edit', de: 'Bearbeiten', es: 'Editar' })}
+                  </button>
+                  <button type="button" onClick={() => deleteComment(comment.id)} className="article-comment-like">
+                    {t({ en: 'Delete', de: 'Löschen', es: 'Eliminar' })}
                   </button>
                 </div>
 
