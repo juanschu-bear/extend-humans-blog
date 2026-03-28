@@ -61,7 +61,7 @@ function ArticleRow({ article, lang, index }: { article: typeof articles[0]; lan
         transition: `all 0.7s cubic-bezier(0.16, 1, 0.3, 1) ${index * 0.07}s`,
       }}
     >
-      <div style={{
+      <div className="eh-article-main" style={{
         display: 'flex', alignItems: 'baseline' as const, gap: 28, padding: '44px 0',
         borderBottom: `1px solid ${hovered ? 'rgba(201,169,110,0.2)' : 'rgba(201,169,110,0.06)'}`,
         transition: 'border-color 0.4s', position: 'relative' as const,
@@ -73,14 +73,14 @@ function ArticleRow({ article, lang, index }: { article: typeof articles[0]; lan
           opacity: hovered ? 1 : 0, transition: 'opacity 0.5s', pointerEvents: 'none' as const,
         }} />
         {/* Num */}
-        <span style={{
+        <span className="eh-article-num" style={{
           fontFamily: "'Cormorant Garamond', serif", fontSize: 42, fontWeight: 300, fontStyle: 'italic',
           color: hovered ? article.accent : 'rgba(201,169,110,0.12)',
           transition: 'color 0.4s', lineHeight: 1, minWidth: 52, letterSpacing: -1,
         }}>{article.num}</span>
         {/* Content */}
         <div style={{ flex: 1 }}>
-          <h2 style={{
+          <h2 className="eh-article-title" style={{
             fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(24px, 3.5vw, 36px)', fontWeight: 500,
             lineHeight: 1.2, color: hovered ? '#F5EDE0' : 'rgba(245,237,224,0.6)',
             transition: 'color 0.3s', marginBottom: 8,
@@ -95,7 +95,7 @@ function ArticleRow({ article, lang, index }: { article: typeof articles[0]; lan
           )}
         </div>
         {/* Arrow */}
-        <span style={{
+        <span className="eh-article-arrow" style={{
           fontSize: 20, color: '#C9A96E',
           opacity: hovered ? 1 : 0, transform: hovered ? 'translateX(0)' : 'translateX(-8px)',
           transition: 'all 0.4s', alignSelf: 'center' as const, flexShrink: 0,
@@ -161,7 +161,27 @@ export default function ExtendedHumansLibrary(): JSX.Element {
         .footer-loop-title{font-size:clamp(36px,5.2vw,58px)!important;line-height:1.02;letter-spacing:.01em;text-shadow:0 0 20px rgba(201,169,110,.2),0 0 36px rgba(92,152,255,.1);animation:footerHeadlinePulse 4.8s ease-in-out .9s infinite}
         .footer-loop-subtitle{font-size:clamp(18px,2.1vw,26px)!important;line-height:1.35;color:#9a8f7d!important;text-shadow:0 0 22px rgba(76,132,255,.1)}
         .social-proof-strip{padding:64px 0}
-        @media(max-width:760px){.social-proof-strip{padding:48px 20px!important}.social-proof-inner{padding:0!important}.marquee-item{font-size:clamp(16px,4vw,22px)!important;padding:0 20px!important}.marquee-fade{width:60px!important}.author-section-inner{flex-direction:column;gap:24px}.author-visual{width:160px!important;margin-bottom:24px}}
+        @media(max-width:760px){
+          .social-proof-strip{padding:48px 20px!important}
+          .social-proof-inner{padding:0!important}
+          .marquee-item{font-size:clamp(16px,4vw,22px)!important;padding:0 20px!important}
+          .marquee-fade{width:60px!important}
+          .author-section-inner{flex-direction:column;gap:24px}
+          .author-visual{width:160px!important;margin-bottom:24px}
+          .author-story-scroll{
+            max-height:62vh;
+            overflow-y:scroll;
+            -webkit-overflow-scrolling:touch;
+            overscroll-behavior:contain;
+            touch-action:pan-y;
+            padding-right:4px;
+          }
+          .eh-article-row{padding:0 20px!important}
+          .eh-article-main{gap:18px!important;padding:34px 0!important}
+          .eh-article-num{font-size:38px!important;min-width:38px!important}
+          .eh-article-title{font-size:clamp(20px,6.4vw,30px)!important}
+          .eh-article-arrow{display:none!important}
+        }
         ::selection{background:#C9A96E;color:#0B0A0F}
       `}</style>
 
@@ -380,12 +400,12 @@ export default function ExtendedHumansLibrary(): JSX.Element {
               }}
             >
               {authorExpanded
-                ? tx({ en: 'Collapse Author Story', de: 'Autorentext einklappen', es: 'Ocultar historia del autor' })
-                : tx({ en: 'Read Full Author Story', de: 'Vollständigen Autorentext lesen', es: 'Leer historia completa del autor' })}
+                ? tx({ en: 'Collapse Author Story', de: 'Entstehungsgeschichte einklappen', es: 'Ocultar historia del autor' })
+                : tx({ en: 'Read Full Author Story', de: 'Vollständige Entstehungsgeschichte lesen', es: 'Leer historia completa del autor' })}
             </button>
             <div
               style={{
-                maxHeight: authorExpanded ? 1400 : 0,
+                maxHeight: authorExpanded ? 5000 : 0,
                 opacity: authorExpanded ? 1 : 0,
                 overflow: 'hidden',
                 transition: 'max-height 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1)',
@@ -396,13 +416,14 @@ export default function ExtendedHumansLibrary(): JSX.Element {
                 marginBottom: 16,
               }}
             >
-              {tx({
+              <div className="author-story-scroll">
+                {tx({
                 en: "I didn't start by building technology. I started by taking people apart.\n\nOver a decade in psychology and human cognition taught me something that changed everything: We're living light-years behind what we're capable of. The beliefs we carry, the emotions we feel, the way we perceive reality, almost none of it was consciously chosen. It was installed. By culture, by conditioning, by systems we never questioned. And the moment you see that, you can't unsee it.\n\nThat's what this platform is about. Taking apart the things we were taught to accept without questioning. Consciousness, identity, emotion, perception, language, proof, reality itself. Every article here is designed to pull back one more layer and show you: The version of you that's running right now isn't the final version. It isn't even close.\n\nBeing a System Architect opened a door I didn't expect. It taught me to see everything as structure: Biological systems, psychological patterns, cognitive architectures. And once you learn to read the structure underneath human behavior, you realize how much of it can be understood, modeled, and extended. The human body has limits. The human mind has limits. But the patterns that make us who we are? Those can be carried further than biology alone allows.\n\nThat's why I built ONIOKO and Observational Perception Models. OPM isn't a product. It's an infrastructure. A multi-layered system that observes what humans miss: Micro-expressions that flash across a face in 40 milliseconds, vocal patterns that reveal stress before the speaker is aware of it, behavioral signals that no word in any language was ever built to describe. Avatars are one expression of that infrastructure. Coaching is another. Perception-driven sales, education, investigation: Each one is a different lens on the same foundational question: What becomes possible when technology doesn't replace human perception but extends it?\n\nThe vision isn't to build productivity tools. The world has enough of those. The vision is to extend the human species itself. To show what's actually possible when we stop optimizing for efficiency and start building for expansion. When power stops meaning control over others and starts meaning the full expression of what a single human can become. When legacy stops meaning material wealth and starts meaning a renewed, extended species that the next generations can carry forward.\n\nThat's what Extended Humans is. Not a blog. Not a brand. A case for why we're capable of far more than we've been told. And an invitation to stop accepting the version of reality that was handed to you.\n\nIf something I write here disturbs the way you see yourself: Good. That's the whole point.\n\nI don't build tools that replace people. I build the systems that show them what they actually are.",
                 de: "Ich hab nicht damit angefangen, Technologie zu bauen. Ich hab damit angefangen, Menschen auseinanderzunehmen.\n\nÜber ein Jahrzehnt in Psychologie und menschlicher Kognition haben mich etwas gelehrt, das alles verändert hat: Wir leben Lichtjahre hinter dem, wozu wir fähig sind. Die Überzeugungen, die wir tragen, die Emotionen, die wir fühlen, die Art, wie wir Realität wahrnehmen, fast nichts davon wurde bewusst gewählt. Es wurde installiert. Von Kultur, von Konditionierung, von Systemen, die wir nie hinterfragt haben. Und in dem Moment, in dem du das siehst, kannst du es nicht mehr übersehen.\n\nDarum geht es auf dieser Plattform. Die Dinge auseinanderzunehmen, die uns beigebracht wurden zu akzeptieren, ohne sie zu hinterfragen. Bewusstsein, Identität, Emotion, Wahrnehmung, Sprache, Beweis, Realität selbst. Jeder Artikel hier ist darauf ausgelegt, eine weitere Schicht zurückzuziehen und dir zu zeigen: Die Version von dir, die gerade läuft, ist nicht die finale Version. Sie ist nicht einmal annähernd.\n\nSystem Architect zu sein hat eine Tür geöffnet, die ich nicht erwartet hatte. Es hat mich gelehrt, alles als Struktur zu sehen: Biologische Systeme, psychologische Muster, kognitive Architekturen. Und sobald du lernst, die Struktur unter menschlichem Verhalten zu lesen, erkennst du, wie viel davon verstanden, modelliert und erweitert werden kann. Der menschliche Körper hat Grenzen. Der menschliche Geist hat Grenzen. Aber die Muster, die uns zu dem machen, was wir sind? Die können weiter getragen werden, als Biologie allein es erlaubt.\n\nDeshalb habe ich ONIOKO und die Observational Perception Models gebaut. OPM ist kein Produkt. Es ist eine Infrastruktur. Ein mehrschichtiges System, das beobachtet, was Menschen übersehen: Mikroausdrücke, die für 40 Millisekunden über ein Gesicht huschen, Stimmmuster, die Stress verraten, bevor der Sprecher sich dessen bewusst ist, Verhaltenssignale, für die kein Wort in irgendeiner Sprache jemals gebaut wurde. Avatare sind ein Ausdruck dieser Infrastruktur. Coaching ein anderer. Wahrnehmungsgetriebener Vertrieb, Bildung, Ermittlung: Jeder ist eine andere Linse auf dieselbe grundlegende Frage: Was wird möglich, wenn Technologie menschliche Wahrnehmung nicht ersetzt, sondern erweitert?\n\nDie Vision ist nicht, Produktivitätstools zu bauen. Die Welt hat genug davon. Die Vision ist, die menschliche Spezies selbst zu erweitern. Zu zeigen, was tatsächlich möglich ist, wenn wir aufhören, für Effizienz zu optimieren und anfangen, für Expansion zu bauen. Wenn Macht aufhört, Kontrolle über andere zu bedeuten, und anfängt, den vollen Ausdruck dessen zu bedeuten, was ein einzelner Mensch werden kann. Wenn Vermächtnis aufhört, materiellen Wohlstand zu bedeuten, und anfängt, eine erneuerte, erweiterte Spezies zu bedeuten, die die nächsten Generationen weitertragen können.\n\nDas ist Extended Humans. Kein Blog. Keine Marke. Ein Plädoyer dafür, dass wir zu weit mehr fähig sind, als man uns gesagt hat. Und eine Einladung, die Version der Realität, die dir übergeben wurde, nicht weiter zu akzeptieren.\n\nWenn etwas, das ich hier schreibe, die Art erschüttert, wie du dich selbst siehst: Gut. Genau darum geht es.\n\nIch baue keine Werkzeuge, die Menschen ersetzen. Ich baue die Systeme, die ihnen zeigen, was sie wirklich sind.",
                 es: "No empecé construyendo tecnología. Empecé desarmando personas.\n\nMás de una década en psicología y cognición humana me enseñaron algo que lo cambió todo: Estamos viviendo a años luz de lo que somos capaces. Las creencias que cargamos, las emociones que sentimos, la forma en que percibimos la realidad, casi nada de eso fue elegido conscientemente. Fue instalado. Por la cultura, por el condicionamiento, por sistemas que nunca cuestionamos. Y en el momento en que ves eso, no puedes dejar de verlo.\n\nDe eso se trata esta plataforma. De desarmar las cosas que nos enseñaron a aceptar sin cuestionar. Consciencia, identidad, emoción, percepción, lenguaje, evidencia, la realidad misma. Cada artículo aquí está diseñado para retirar una capa más y mostrarte: La versión de ti que está corriendo ahora mismo no es la versión final. Ni siquiera se acerca.\n\nSer System Architect abrió una puerta que no esperaba. Me enseñó a ver todo como estructura: Sistemas biológicos, patrones psicológicos, arquitecturas cognitivas. Y una vez que aprendes a leer la estructura debajo del comportamiento humano, te das cuenta de cuánto puede ser comprendido, modelado y extendido. El cuerpo humano tiene límites. La mente humana tiene límites. Pero los patrones que nos hacen quienes somos: Esos pueden llevarse más lejos de lo que la biología sola permite.\n\nPor eso construí ONIOKO y los Modelos de Percepción Observacional. OPM no es un producto. Es una infraestructura. Un sistema multicapa que observa lo que los humanos pasan por alto: Microexpresiones que cruzan un rostro en 40 milisegundos, patrones vocales que revelan estrés antes de que el hablante sea consciente de ello, señales de comportamiento para las que ninguna palabra en ningún idioma fue jamás construida. Los avatares son una expresión de esa infraestructura. El coaching otra. Ventas impulsadas por percepción, educación, investigación: Cada una es una lente diferente sobre la misma pregunta fundamental: ¿Qué se vuelve posible cuando la tecnología no reemplaza la percepción humana sino que la extiende?\n\nLa visión no es construir herramientas de productividad. El mundo tiene suficientes de esas. La visión es extender a la especie humana en sí misma. Mostrar lo que realmente es posible cuando dejamos de optimizar para la eficiencia y empezamos a construir para la expansión. Cuando poder deja de significar control sobre otros y empieza a significar la expresión plena de lo que un solo ser humano puede llegar a ser. Cuando legado deja de significar riqueza material y empieza a significar una especie renovada, extendida, que las próximas generaciones pueden llevar adelante.\n\nEso es Extended Humans. No es un blog. No es una marca. Es un argumento de por qué somos capaces de mucho más de lo que nos han dicho. Y una invitación a dejar de aceptar la versión de la realidad que te fue entregada.\n\nSi algo que escribo aquí perturba la forma en que te ves a ti mismo: Bien. De eso se trata exactamente.\n\nNo construyo herramientas que reemplacen a las personas. Construyo los sistemas que les muestran lo que realmente son.",
               })
-                .split('\n\n')
-                .map((paragraph) => (
+                  .split('\n\n')
+                  .map((paragraph) => (
                   <p key={paragraph.slice(0, 24)} style={{ margin: '0 0 14px', fontFamily: "'Source Sans 3', sans-serif", fontSize: 15, fontWeight: 300, color: '#C0B4A2', lineHeight: 1.75 }}>
                     {paragraph.includes('ONIOKO')
                       ? paragraph.split('ONIOKO').reduce<JSX.Element[]>((acc, part, index, arr) => {
@@ -418,7 +439,8 @@ export default function ExtendedHumansLibrary(): JSX.Element {
                       }, [])
                       : paragraph}
                   </p>
-                ))}
+                  ))}
+              </div>
             </div>
             <div style={{ display: 'flex', gap: 16, flexWrap: 'wrap' }}>
               {(lang === 'en'
