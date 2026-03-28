@@ -254,6 +254,30 @@ body {
   overflow-y: auto;
 }
 
+.article-comment-controls {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.article-comment-controls label {
+  color: rgba(245, 237, 224, 0.72);
+  font-size: 12px;
+  font-family: 'JetBrains Mono', monospace;
+  letter-spacing: 1px;
+}
+
+.article-comment-controls select {
+  border: 1px solid rgba(201, 169, 110, 0.3);
+  background: rgba(11, 10, 15, 0.66);
+  color: #f5ede0;
+  border-radius: 10px;
+  padding: 8px 10px;
+  font-size: 12px;
+}
+
 .article-comments-empty {
   margin: 8px 0;
   color: rgba(245, 237, 224, 0.58);
@@ -268,6 +292,12 @@ body {
   margin-bottom: 10px;
 }
 
+.article-comment-actions {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
 .article-comment-head {
   display: flex;
   justify-content: space-between;
@@ -280,6 +310,12 @@ body {
   color: #f5ede0;
 }
 
+.comment-rating {
+  color: #f4cf87;
+  font-size: 12px;
+  letter-spacing: 1px;
+}
+
 .article-comment-head span {
   color: rgba(245, 237, 224, 0.52);
   font-size: 11px;
@@ -289,6 +325,58 @@ body {
   margin: 0 0 10px;
   color: rgba(245, 237, 224, 0.84);
   line-height: 1.5;
+}
+
+.article-reply-form {
+  margin-top: 10px;
+  display: grid;
+  gap: 8px;
+}
+
+.article-reply-form input,
+.article-reply-form textarea {
+  width: 100%;
+  border: 1px solid rgba(201, 169, 110, 0.2);
+  background: rgba(11, 10, 15, 0.56);
+  border-radius: 10px;
+  color: #f5ede0;
+  font-family: 'Source Sans 3', sans-serif;
+  font-size: 13px;
+  padding: 9px 10px;
+}
+
+.article-reply-form textarea {
+  min-height: 72px;
+  resize: vertical;
+}
+
+.article-replies-list {
+  margin-top: 10px;
+  border-left: 1px solid rgba(201, 169, 110, 0.2);
+  padding-left: 10px;
+  display: grid;
+  gap: 8px;
+}
+
+.article-reply-item {
+  border: 1px solid rgba(201, 169, 110, 0.14);
+  background: rgba(11, 10, 15, 0.42);
+  border-radius: 10px;
+  padding: 10px;
+}
+
+.article-show-more {
+  width: 100%;
+  border: 1px solid rgba(201, 169, 110, 0.28);
+  background: rgba(201, 169, 110, 0.08);
+  color: #f5ede0;
+  border-radius: 999px;
+  padding: 9px 14px;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  margin-top: 8px;
 }
 
 @media (max-width: 760px) {

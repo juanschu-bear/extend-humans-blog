@@ -154,6 +154,16 @@ type EngagementComment = {
   text: string
   createdAt: string
   likes: number
+  rating: number
+  replies: EngagementReply[]
+}
+
+type EngagementReply = {
+  id: string
+  name: string
+  text: string
+  createdAt: string
+  likes: number
 }
 
 type EngagementState = {
@@ -162,6 +172,7 @@ type EngagementState = {
   userRating: number
   comments: EngagementComment[]
   likedCommentIds: string[]
+  likedReplyIds: string[]
 }
 
 function ArticleEngagement({ articleKey }: { articleKey: string }): JSX.Element {
@@ -172,8 +183,33 @@ function ArticleEngagement({ articleKey }: { articleKey: string }): JSX.Element 
   const [userRating, setUserRating] = useState(0)
   const [comments, setComments] = useState<EngagementComment[]>([])
   const [likedCommentIds, setLikedCommentIds] = useState<string[]>([])
+  const [likedReplyIds, setLikedReplyIds] = useState<string[]>([])
+  const [filter, setFilter] = useState<'newest' | 'top' | 'discussed'>('newest')
+  const [visibleCount, setVisibleCount] = useState(4)
+  const [expandedReplies, setExpandedReplies] = useState<Record<string, boolean>>({})
+  const [replyDrafts, setReplyDrafts] = useState<Record<string, { name: string; text: string; open: boolean }>>({})
   const [name, setName] = useState('')
   const [commentText, setCommentText] = useState('')
+  const [uiLang, setUiLang] = useState<'en' | 'de' | 'es'>(() => {
+    const saved = typeof window !== 'undefined' ? window.localStorage.getItem('eh:lang') : null
+    if (saved === 'de' || saved === 'es' || saved === 'en') return saved
+    const browser = typeof navigator !== 'undefined' ? navigator.language.toLowerCase() : 'en'
+    if (browser.startsWith('de')) return 'de'
+    if (browser.startsWith('es')) return 'es'
+    return 'en'
+  })
+
+  const t = (copy: Record<'en' | 'de' | 'es', string>) => copy[uiLang]
+
+  useEffect(() => {
+    const syncLang = () => {
+      const saved = window.localStorage.getItem('eh:lang')
+      if (saved === 'de' || saved === 'es' || saved === 'en') setUiLang(saved)
+    }
+    syncLang()
+    window.addEventListener('storage', syncLang)
+    return () => window.removeEventListener('storage', syncLang)
+  }, [])
 
   useEffect(() => {
     try {
@@ -184,6 +220,7 @@ function ArticleEngagement({ articleKey }: { articleKey: string }): JSX.Element 
         setUserRating(0)
         setComments([])
         setLikedCommentIds([])
+        setLikedReplyIds([])
         setReady(true)
         return
       }
@@ -191,14 +228,24 @@ function ArticleEngagement({ articleKey }: { articleKey: string }): JSX.Element 
       setArticleLikes(parsed.articleLikes ?? 0)
       setUserLikedArticle(parsed.userLikedArticle ?? false)
       setUserRating(parsed.userRating ?? 0)
-      setComments(Array.isArray(parsed.comments) ? parsed.comments : [])
+      setComments(
+        Array.isArray(parsed.comments)
+          ? parsed.comments.map((comment) => ({
+            ...comment,
+            rating: typeof comment.rating === 'number' ? comment.rating : 0,
+            replies: Array.isArray(comment.replies) ? comment.replies : [],
+          }))
+          : [],
+      )
       setLikedCommentIds(Array.isArray(parsed.likedCommentIds) ? parsed.likedCommentIds : [])
+      setLikedReplyIds(Array.isArray(parsed.likedReplyIds) ? parsed.likedReplyIds : [])
     } catch {
       setArticleLikes(0)
       setUserLikedArticle(false)
       setUserRating(0)
       setComments([])
       setLikedCommentIds([])
+      setLikedReplyIds([])
     } finally {
       setReady(true)
     }
@@ -212,13 +259,23 @@ function ArticleEngagement({ articleKey }: { articleKey: string }): JSX.Element 
       userRating,
       comments,
       likedCommentIds,
+      likedReplyIds,
     }
     localStorage.setItem(storageKey, JSON.stringify(payload))
-  }, [ready, storageKey, articleLikes, userLikedArticle, userRating, comments, likedCommentIds])
+  }, [ready, storageKey, articleLikes, userLikedArticle, userRating, comments, likedCommentIds, likedReplyIds])
 
   const sortedComments = useMemo(
-    () => [...comments].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()),
-    [comments],
+    () => {
+      const score = (comment: EngagementComment) => comment.likes * 2 + comment.replies.length
+      const byNewest = (a: EngagementComment, b: EngagementComment) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      const byTop = (a: EngagementComment, b: EngagementComment) => b.likes - a.likes || byNewest(a, b)
+      const byDiscussed = (a: EngagementComment, b: EngagementComment) => score(b) - score(a) || byNewest(a, b)
+
+      if (filter === 'top') return [...comments].sort(byTop)
+      if (filter === 'discussed') return [...comments].sort(byDiscussed)
+      return [...comments].sort(byNewest)
+    },
+    [comments, filter],
   )
 
   const toggleArticleLike = () => {
@@ -243,6 +300,63 @@ function ArticleEngagement({ articleKey }: { articleKey: string }): JSX.Element 
     })
   }
 
+  const toggleReplyLike = (commentId: string, replyId: string) => {
+    const key = `${commentId}:${replyId}`
+    const alreadyLiked = likedReplyIds.includes(key)
+    setComments((prev) => prev.map((comment) => {
+      if (comment.id !== commentId) return comment
+      return {
+        ...comment,
+        replies: comment.replies.map((reply) => {
+          if (reply.id !== replyId) return reply
+          return { ...reply, likes: Math.max(0, reply.likes + (alreadyLiked ? -1 : 1)) }
+        }),
+      }
+    }))
+    setLikedReplyIds((prev) => {
+      if (alreadyLiked) return prev.filter((value) => value !== key)
+      return [...prev, key]
+    })
+  }
+
+  const toggleReplies = (commentId: string) => {
+    setExpandedReplies((prev) => ({ ...prev, [commentId]: !prev[commentId] }))
+  }
+
+  const toggleReplyForm = (commentId: string) => {
+    setReplyDrafts((prev) => ({
+      ...prev,
+      [commentId]: {
+        name: prev[commentId]?.name ?? '',
+        text: prev[commentId]?.text ?? '',
+        open: !prev[commentId]?.open,
+      },
+    }))
+  }
+
+  const submitReply = (event: FormEvent<HTMLFormElement>, commentId: string) => {
+    event.preventDefault()
+    const draft = replyDrafts[commentId]
+    if (!draft || draft.text.trim().length < 2) return
+
+    const newReply: EngagementReply = {
+      id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+      name: draft.name.trim() || 'Anonymous',
+      text: draft.text.trim(),
+      createdAt: new Date().toISOString(),
+      likes: 0,
+    }
+
+    setComments((prev) => prev.map((comment) => (
+      comment.id === commentId ? { ...comment, replies: [...comment.replies, newReply] } : comment
+    )))
+    setReplyDrafts((prev) => ({
+      ...prev,
+      [commentId]: { name: '', text: '', open: false },
+    }))
+    setExpandedReplies((prev) => ({ ...prev, [commentId]: true }))
+  }
+
   const handleSubmitComment = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     const trimmedText = commentText.trim()
@@ -255,20 +369,29 @@ function ArticleEngagement({ articleKey }: { articleKey: string }): JSX.Element 
       text: trimmedText,
       createdAt: new Date().toISOString(),
       likes: 0,
+      rating: userRating,
+      replies: [],
     }
     setComments((prev) => [newComment, ...prev])
     setCommentText('')
+    setVisibleCount(4)
   }
 
   return (
     <section className="article-engagement">
       <div className="article-engagement-card">
         <p className="article-engagement-eyebrow">Reader Feedback</p>
-        <h3>Rate this article and join the discussion</h3>
+        <h3>{t({
+          en: 'Rate this article and join the discussion',
+          de: 'Bewerte diesen Artikel und diskutiere mit',
+          es: 'Califica este artículo y únete a la conversación',
+        })}</h3>
 
         <div className="article-engagement-actions">
           <button type="button" className={`article-like-btn ${userLikedArticle ? 'is-active' : ''}`} onClick={toggleArticleLike}>
-            {userLikedArticle ? 'Liked' : 'Like'} · {articleLikes}
+            {userLikedArticle
+              ? t({ en: 'Liked', de: 'Gefällt mir', es: 'Me gusta' })
+              : t({ en: 'Like', de: 'Gefällt mir', es: 'Me gusta' })} · {articleLikes}
           </button>
           <div className="article-stars" role="radiogroup" aria-label="Rate article">
             {[1, 2, 3, 4, 5].map((star) => (
@@ -289,37 +412,124 @@ function ArticleEngagement({ articleKey }: { articleKey: string }): JSX.Element 
           <input
             type="text"
             maxLength={50}
-            placeholder="Your name (optional)"
+            placeholder={t({ en: 'Your name (optional)', de: 'Dein Name (optional)', es: 'Tu nombre (opcional)' })}
             value={name}
             onChange={(event) => setName(event.target.value)}
           />
           <textarea
-            placeholder="Share your perspective..."
+            placeholder={t({ en: 'Share your perspective...', de: 'Teile deine Perspektive...', es: 'Comparte tu perspectiva...' })}
             value={commentText}
             onChange={(event) => setCommentText(event.target.value)}
             rows={4}
             required
           />
-          <button type="submit">Post Comment</button>
+          <button type="submit">{t({ en: 'Post Comment', de: 'Kommentar posten', es: 'Publicar comentario' })}</button>
         </form>
 
+        <div className="article-comment-controls">
+          <label htmlFor={`comment-filter-${articleKey}`}>{t({ en: 'Filter', de: 'Filter', es: 'Filtro' })}</label>
+          <select
+            id={`comment-filter-${articleKey}`}
+            value={filter}
+            onChange={(event) => setFilter(event.target.value as 'newest' | 'top' | 'discussed')}
+          >
+            <option value="newest">{t({ en: 'Newest', de: 'Neueste', es: 'Más recientes' })}</option>
+            <option value="top">{t({ en: 'Top liked', de: 'Beliebteste', es: 'Más gustados' })}</option>
+            <option value="discussed">{t({ en: 'Most discussed', de: 'Meist diskutiert', es: 'Más discutidos' })}</option>
+          </select>
+        </div>
+
         <div className="article-comments-feed">
-          {sortedComments.length === 0 && <p className="article-comments-empty">No comments yet. Start the conversation.</p>}
-          {sortedComments.map((comment) => {
+          {sortedComments.length === 0 && <p className="article-comments-empty">{t({
+            en: 'No comments yet. Start the conversation.',
+            de: 'Noch keine Kommentare. Starte die Diskussion.',
+            es: 'Aún no hay comentarios. Inicia la conversación.',
+          })}</p>}
+          {sortedComments.slice(0, visibleCount).map((comment) => {
             const liked = likedCommentIds.includes(comment.id)
+            const repliesOpen = !!expandedReplies[comment.id]
+            const draft = replyDrafts[comment.id] ?? { name: '', text: '', open: false }
             return (
               <article key={comment.id} className="article-comment-item">
                 <div className="article-comment-head">
-                  <strong>{comment.name}</strong>
+                  <strong>
+                    {comment.name}
+                    {comment.rating > 0 && <span className="comment-rating">{' · '}{'★'.repeat(comment.rating)}</span>}
+                  </strong>
                   <span>{new Date(comment.createdAt).toLocaleString()}</span>
                 </div>
                 <p>{comment.text}</p>
-                <button type="button" onClick={() => toggleCommentLike(comment.id)} className={`article-comment-like ${liked ? 'is-active' : ''}`}>
-                  {liked ? 'Liked' : 'Like'} · {comment.likes}
-                </button>
+                <div className="article-comment-actions">
+                  <button type="button" onClick={() => toggleCommentLike(comment.id)} className={`article-comment-like ${liked ? 'is-active' : ''}`}>
+                    {liked
+                      ? t({ en: 'Liked', de: 'Gefällt mir', es: 'Me gusta' })
+                      : t({ en: 'Like', de: 'Gefällt mir', es: 'Me gusta' })} · {comment.likes}
+                  </button>
+                  <button type="button" onClick={() => toggleReplyForm(comment.id)} className="article-comment-like">
+                    {t({ en: 'Reply', de: 'Antworten', es: 'Responder' })}
+                  </button>
+                  <button type="button" onClick={() => toggleReplies(comment.id)} className="article-comment-like">
+                    {repliesOpen
+                      ? t({ en: 'Hide replies', de: 'Antworten ausblenden', es: 'Ocultar respuestas' })
+                      : t({ en: 'Show replies', de: 'Antworten anzeigen', es: 'Ver respuestas' })} · {comment.replies.length}
+                  </button>
+                </div>
+
+                {draft.open && (
+                  <form className="article-reply-form" onSubmit={(event) => submitReply(event, comment.id)}>
+                    <input
+                      type="text"
+                      maxLength={50}
+                      value={draft.name}
+                      onChange={(event) => setReplyDrafts((prev) => ({ ...prev, [comment.id]: { ...draft, name: event.target.value, open: true } }))}
+                      placeholder={t({ en: 'Your name (optional)', de: 'Dein Name (optional)', es: 'Tu nombre (opcional)' })}
+                    />
+                    <textarea
+                      value={draft.text}
+                      onChange={(event) => setReplyDrafts((prev) => ({ ...prev, [comment.id]: { ...draft, text: event.target.value, open: true } }))}
+                      placeholder={t({ en: 'Write a reply...', de: 'Schreibe eine Antwort...', es: 'Escribe una respuesta...' })}
+                      rows={3}
+                      required
+                    />
+                    <button type="submit">{t({ en: 'Post Reply', de: 'Antwort posten', es: 'Publicar respuesta' })}</button>
+                  </form>
+                )}
+
+                {repliesOpen && comment.replies.length > 0 && (
+                  <div className="article-replies-list">
+                    {comment.replies.map((reply) => {
+                      const replyKey = `${comment.id}:${reply.id}`
+                      const replyLiked = likedReplyIds.includes(replyKey)
+                      return (
+                        <div key={reply.id} className="article-reply-item">
+                          <div className="article-comment-head">
+                            <strong>{reply.name}</strong>
+                            <span>{new Date(reply.createdAt).toLocaleString()}</span>
+                          </div>
+                          <p>{reply.text}</p>
+                          <button type="button" onClick={() => toggleReplyLike(comment.id, reply.id)} className={`article-comment-like ${replyLiked ? 'is-active' : ''}`}>
+                            {replyLiked
+                              ? t({ en: 'Liked', de: 'Gefällt mir', es: 'Me gusta' })
+                              : t({ en: 'Like', de: 'Gefällt mir', es: 'Me gusta' })} · {reply.likes}
+                          </button>
+                        </div>
+                      )
+                    })}
+                  </div>
+                )}
               </article>
             )
           })}
+          {sortedComments.length > visibleCount && (
+            <button type="button" className="article-show-more" onClick={() => setVisibleCount((v) => v + 4)}>
+              {t({ en: 'Show more comments', de: 'Mehr Kommentare anzeigen', es: 'Mostrar más comentarios' })}
+            </button>
+          )}
+          {sortedComments.length > 4 && visibleCount > 4 && (
+            <button type="button" className="article-show-more" onClick={() => setVisibleCount(4)}>
+              {t({ en: 'Show fewer comments', de: 'Weniger Kommentare anzeigen', es: 'Mostrar menos comentarios' })}
+            </button>
+          )}
         </div>
       </div>
     </section>

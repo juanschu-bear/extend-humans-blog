@@ -106,7 +106,11 @@ function ArticleRow({ article, lang, index }: { article: typeof articles[0]; lan
 }
 
 export default function ExtendedHumansLibrary(): JSX.Element {
-  const [lang, setLang] = useState<Lang>('en');
+  const [lang, setLang] = useState<Lang>(() => {
+    const saved = typeof window !== 'undefined' ? window.localStorage.getItem('eh:lang') : null;
+    if (saved === 'en' || saved === 'de' || saved === 'es') return saved;
+    return 'en';
+  });
   const dustRef = useRef<HTMLDivElement>(null);
   const [countdownText, setCountdownText] = useState('00d 00h 00m 00s');
   const [socialProofRef, socialProofVisible] = useInViewOnce<HTMLElement>(0.1);
@@ -115,6 +119,10 @@ export default function ExtendedHumansLibrary(): JSX.Element {
   const [authorExpanded, setAuthorExpanded] = useState(false);
 
   const tx = (o: Record<Lang, string>): string => o[lang];
+
+  useEffect(() => {
+    window.localStorage.setItem('eh:lang', lang);
+  }, [lang]);
 
   // Generate dust particles on mount
   useEffect(() => {
