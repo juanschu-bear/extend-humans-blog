@@ -172,8 +172,82 @@ function ArticleShell({ children }: { children: JSX.Element }): JSX.Element {
     <div className="route-page">
       <Link to="/" className="back-link">Back to Library</Link>
       {children}
+      <ArticleShareBar />
       <ArticleEngagement articleKey={pathname} />
     </div>
+  )
+}
+
+function ArticleShareBar(): JSX.Element {
+  const [uiLang, setUiLang] = useState<'en' | 'de' | 'es'>(() => {
+    const saved = typeof window !== 'undefined' ? window.localStorage.getItem('eh:lang') : null
+    if (saved === 'de' || saved === 'es' || saved === 'en') return saved
+    return 'en'
+  })
+  const [toast, setToast] = useState('')
+  const t = (copy: Record<'en' | 'de' | 'es', string>) => copy[uiLang]
+
+  useEffect(() => {
+    const syncLang = () => {
+      const saved = window.localStorage.getItem('eh:lang')
+      if (saved === 'de' || saved === 'es' || saved === 'en') setUiLang(saved)
+    }
+    syncLang()
+    window.addEventListener('storage', syncLang)
+    window.addEventListener('eh:lang-change', syncLang as EventListener)
+    return () => {
+      window.removeEventListener('storage', syncLang)
+      window.removeEventListener('eh:lang-change', syncLang as EventListener)
+    }
+  }, [])
+
+  const handleShare = async () => {
+    const url = window.location.href
+    if (navigator.share) {
+      try {
+        await navigator.share({
+          title: 'Extended Humans',
+          text: t({
+            en: 'Read this Extended Humans article.',
+            de: 'Lies diesen Extended Humans Artikel.',
+            es: 'Lee este artículo de Extended Humans.',
+          }),
+          url,
+        })
+        return
+      } catch {
+        // fallback to copy
+      }
+    }
+    await navigator.clipboard.writeText(url)
+    setToast(t({ en: 'Link copied.', de: 'Link kopiert.', es: 'Enlace copiado.' }))
+    window.setTimeout(() => setToast(''), 1400)
+  }
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(window.location.href)
+    setToast(t({ en: 'Link copied.', de: 'Link kopiert.', es: 'Enlace copiado.' }))
+    window.setTimeout(() => setToast(''), 1400)
+  }
+
+  return (
+    <section className="article-share-block" aria-label="Share article">
+      <div className="article-share-divider" />
+      <div className="article-share-card">
+        <p>{t({ en: 'Share this article', de: 'Diesen Artikel teilen', es: 'Compartir este artículo' })}</p>
+        <div className="article-share-buttons">
+          <button type="button" className="article-share-btn" onClick={handleShare}>
+            <span aria-hidden="true">↗</span>
+            {t({ en: 'Share', de: 'Teilen', es: 'Compartir' })}
+          </button>
+          <button type="button" className="article-share-btn" onClick={handleCopy}>
+            <span aria-hidden="true">⧉</span>
+            {t({ en: 'Copy link', de: 'Link kopieren', es: 'Copiar enlace' })}
+          </button>
+        </div>
+        {toast && <small>{toast}</small>}
+      </div>
+    </section>
   )
 }
 
@@ -220,7 +294,6 @@ function ArticleEngagement({ articleKey }: { articleKey: string }): JSX.Element 
   const [editName, setEditName] = useState('')
   const [editText, setEditText] = useState('')
   const [editRating, setEditRating] = useState(4)
-  const [shareToast, setShareToast] = useState('')
   const [uiLang, setUiLang] = useState<'en' | 'de' | 'es'>(() => {
     const saved = typeof window !== 'undefined' ? window.localStorage.getItem('eh:lang') : null
     if (saved === 'de' || saved === 'es' || saved === 'en') return saved
@@ -492,42 +565,6 @@ function ArticleEngagement({ articleKey }: { articleKey: string }): JSX.Element 
     if (editingCommentId === commentId) cancelEditing()
   }
 
-  const handleShare = async () => {
-    const shareUrl = window.location.href
-    const shareTitle = 'Extended Humans'
-    const shareText = t({
-      en: 'Read this Extended Humans article.',
-      de: 'Lies diesen Extended Humans Artikel.',
-      es: 'Lee este artículo de Extended Humans.',
-    })
-
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: shareTitle, text: shareText, url: shareUrl })
-        return
-      } catch {
-        // Fallback below
-      }
-    }
-
-    await navigator.clipboard.writeText(shareUrl)
-    setShareToast(t({
-      en: 'Link copied.',
-      de: 'Link kopiert.',
-      es: 'Enlace copiado.',
-    }))
-    window.setTimeout(() => setShareToast(''), 1400)
-  }
-
-  const copyArticleLink = async () => {
-    await navigator.clipboard.writeText(window.location.href)
-    setShareToast(t({
-      en: 'Link copied.',
-      de: 'Link kopiert.',
-      es: 'Enlace copiado.',
-    }))
-    window.setTimeout(() => setShareToast(''), 1400)
-  }
 
   return (
     <section className="article-engagement">
@@ -538,16 +575,6 @@ function ArticleEngagement({ articleKey }: { articleKey: string }): JSX.Element 
           de: 'Bewerte diesen Artikel und diskutiere mit',
           es: 'Califica este artículo y únete a la conversación',
         })}</h3>
-        <div className="article-share-row">
-          <button type="button" className="article-comment-like" onClick={handleShare}>
-            {t({ en: 'Share article', de: 'Artikel teilen', es: 'Compartir artículo' })}
-          </button>
-          <button type="button" className="article-comment-like" onClick={copyArticleLink}>
-            {t({ en: 'Copy link', de: 'Link kopieren', es: 'Copiar enlace' })}
-          </button>
-          {shareToast && <span className="article-share-toast">{shareToast}</span>}
-        </div>
-
         <div className="article-engagement-actions">
           <div className="article-rating-summary">
             {averageRating > 0 ? `${averageRating.toFixed(1)}/5` : '0.0/5'} · {comments.filter((c) => c.rating > 0).length}{' '}
