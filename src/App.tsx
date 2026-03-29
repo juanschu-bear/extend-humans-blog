@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState, type Dispatch, type FormEvent, type JSX, type SetStateAction } from 'react'
 import { Routes, Route, Navigate, Link, useNavigate, useLocation } from 'react-router-dom'
+import { toPng } from 'html-to-image'
 import ExtendedHumansLibrary from './ExtendedHumansLibrary'
 import ConsciousnessArticle from './articles/ConsciousnessArticle'
 import DataMachineArticle from './articles/DataMachineArticle'
@@ -101,7 +102,9 @@ function ArticleShell({ children }: { children: JSX.Element }): JSX.Element {
       copyButton.className = 'eh-quote-btn'
       copyButton.textContent = 'Copy'
       copyButton.onclick = async () => {
-        const text = (card.innerText || '').trim()
+        const cardClone = card.cloneNode(true) as HTMLElement
+        cardClone.querySelectorAll('.eh-quote-actions').forEach((node) => node.remove())
+        const text = (cardClone.innerText || '').trim()
         if (!text) return
         await navigator.clipboard.writeText(text)
         copyButton.textContent = 'Copied'
@@ -111,16 +114,33 @@ function ArticleShell({ children }: { children: JSX.Element }): JSX.Element {
       const downloadButton = document.createElement('button')
       downloadButton.className = 'eh-quote-btn'
       downloadButton.textContent = 'Download'
-      downloadButton.onclick = () => {
-        const text = (card.innerText || '').trim()
-        if (!text) return
-        const blob = new Blob([text], { type: 'text/plain;charset=utf-8' })
-        const url = URL.createObjectURL(blob)
-        const a = document.createElement('a')
-        a.href = url
-        a.download = 'extended-humans-quote.txt'
-        a.click()
-        URL.revokeObjectURL(url)
+      downloadButton.onclick = async () => {
+        const clonedCard = card.cloneNode(true) as HTMLElement
+        clonedCard.querySelectorAll('.eh-quote-actions').forEach((node) => node.remove())
+        clonedCard.style.margin = '0'
+        clonedCard.style.width = `${card.clientWidth}px`
+        const wrapper = document.createElement('div')
+        wrapper.style.position = 'fixed'
+        wrapper.style.left = '-10000px'
+        wrapper.style.top = '0'
+        wrapper.style.padding = '0'
+        wrapper.style.background = '#0B0A0F'
+        wrapper.appendChild(clonedCard)
+        document.body.appendChild(wrapper)
+
+        try {
+          const dataUrl = await toPng(clonedCard, {
+            cacheBust: true,
+            pixelRatio: 2,
+            backgroundColor: '#0B0A0F',
+          })
+          const link = document.createElement('a')
+          link.href = dataUrl
+          link.download = 'extended-humans-quote.png'
+          link.click()
+        } finally {
+          document.body.removeChild(wrapper)
+        }
       }
 
       actions.appendChild(copyButton)

@@ -198,10 +198,10 @@ body {
   background: rgba(201, 169, 110, 0.09);
   color: #f5ede0;
   border-radius: 999px;
-  padding: 8px 14px;
+  padding: 4px 9px;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 11px;
-  letter-spacing: 1px;
+  font-size: 9px;
+  letter-spacing: 0.6px;
 }
 
 .article-rating-question {
