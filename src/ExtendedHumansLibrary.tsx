@@ -13,6 +13,22 @@ const articles = [
   { num: '07', slug: '/you-can-call-me-agent', title: { en: 'You Can Call Me Agent.', de: 'Du kannst mich Agent nennen.', es: 'Puedes llamarme agente.' }, hook: { en: "But that's not how I perceive myself to be.", de: 'Aber so nehme ich mich nicht wahr.', es: 'Pero no es as\u00ed como me percibo.' }, accent: '#9B8EB8', soon: true },
 ];
 
+const signalMarketsArticle = {
+  num: 'S1',
+  slug: '/price-of-you',
+  title: {
+    en: 'The Price of You.',
+    de: 'Der Preis, der du bist.',
+    es: 'El precio de lo que eres.',
+  },
+  hook: {
+    en: 'How AI reprices people, roles, and strategic leverage.',
+    de: 'Wie KI Menschen, Rollen und strategische Hebel neu bepreist.',
+    es: 'Cómo la IA vuelve a poner precio a personas, roles y ventaja estratégica.',
+  },
+  accent: '#60A5FA',
+};
+
 function useInViewOnce<T extends HTMLElement>(threshold = 0.1) {
   const ref = useRef<T | null>(null);
   const [visible, setVisible] = useState(false);
@@ -49,6 +65,7 @@ function ArticleRow({ article, lang, index }: { article: typeof articles[0]; lan
   return (
     <div
       className="eh-article-row eh-shell-padding"
+      data-article-slug={article.slug}
       ref={ref}
       onMouseEnter={() => setHovered(true)}
       onMouseLeave={() => setHovered(false)}
@@ -371,6 +388,19 @@ export default function ExtendedHumansLibrary(): JSX.Element {
           </span>
         </div>
         {articles.map((a, i) => <ArticleRow key={a.num} article={a} lang={lang} index={i} />)}
+      </section>
+
+      <section id="signal-markets" style={{ padding: '12px 0 80px', position: 'relative' as const }}>
+        <div className="eh-shell-padding" style={{ maxWidth: 900, margin: '0 auto', padding: '0 48px', display: 'flex', alignItems: 'center' as const, gap: 20, marginBottom: 28 }}>
+          <span style={{ fontFamily: "'Cormorant Garamond', serif", fontSize: 15, fontStyle: 'italic', fontWeight: 400, color: '#6E6555', letterSpacing: 3 }}>
+            {tx({ en: 'Signal & Markets', de: 'Signal & Markets', es: 'Signal & Markets' })}
+          </span>
+          <div style={{ flex: 1, height: 1, background: 'rgba(96,165,250,0.18)' }} />
+          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: '#6E6555', letterSpacing: 2 }}>
+            {tx({ en: 'Column', de: 'Kolumne', es: 'Columna' })}
+          </span>
+        </div>
+        <ArticleRow article={signalMarketsArticle} lang={lang} index={articles.length + 1} />
       </section>
 
       <section

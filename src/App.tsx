@@ -8,19 +8,7 @@ import LearningArticle from './articles/LearningArticle'
 import CageOfProofArticle from './articles/CageOfProofArticle'
 import LanguageTrapArticle from './articles/LanguageTrapArticle'
 import EmotionsArticle from './articles/EmotionsArticle'
-
-type RowTarget = {
-  slug: string
-}
-
-const rowTargets: RowTarget[] = [
-  { slug: '/ai-consciousness' },
-  { slug: '/data-machine' },
-  { slug: '/the-more-you-learn' },
-  { slug: '/cage-of-proof' },
-  { slug: '/language-trap' },
-  { slug: '/emotions-installed' },
-]
+import PriceOfYouArticle from './articles/PriceOfYouArticle'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -36,18 +24,19 @@ function ClickableLibrary(): JSX.Element {
     const wrapper = wrapperRef.current
     if (!wrapper) return
 
-    const rows = Array.from(wrapper.querySelectorAll<HTMLDivElement>('#stacks > div[style*="cursor: pointer"]'))
-
-    const cleanups = rows.slice(0, rowTargets.length).map((row, index) => {
+    const rows = Array.from(wrapper.querySelectorAll<HTMLDivElement>('[data-article-slug]'))
+    const cleanups = rows.map((row, index) => {
+      const slug = row.dataset.articleSlug
+      if (!slug) return () => {}
       row.setAttribute('role', 'button')
       row.setAttribute('tabindex', '0')
       row.setAttribute('aria-label', `Open article ${index + 1}`)
 
-      const handleClick = () => navigate(rowTargets[index]!.slug)
+      const handleClick = () => navigate(slug)
       const handleKeyDown = (event: KeyboardEvent) => {
         if (event.key === 'Enter' || event.key === ' ') {
           event.preventDefault()
-          navigate(rowTargets[index]!.slug)
+          navigate(slug)
         }
       }
 
@@ -871,6 +860,7 @@ export default function App(): JSX.Element {
       <Route path="/cage-of-proof" element={<ArticleShell><CageOfProofArticle /></ArticleShell>} />
       <Route path="/language-trap" element={<ArticleShell><LanguageTrapArticle /></ArticleShell>} />
       <Route path="/emotions-installed" element={<ArticleShell><EmotionsArticle /></ArticleShell>} />
+      <Route path="/price-of-you" element={<ArticleShell><PriceOfYouArticle /></ArticleShell>} />
       <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
