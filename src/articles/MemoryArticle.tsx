@@ -20,7 +20,7 @@ export default function MemoryArticle(): JSX.Element {
 <div class="hero-subtitle">Your memory doesn't store what happened. It stores what mattered. And there's a difference between those two things that will change how you see yourself.</div>
 <div class="hero-author"><div class="hero-divider"></div><div class="name">JUAN SCHUBERT</div><div class="role">ONIOKO &middot; 10+ Years in Psychology & Human Cognition</div></div>
 <div class="scroll-hint"><span>Read on</span><div class="scroll-arrow"></div></div>`,
-    de: `<div class="hero-series">Erinnerungsreihe &middot; Teil 1</div><div class="hero-eyebrow">Meinung &middot; Ged&auml;chtnis &middot; Identit&auml;t &middot; Psychologie</div>
+    de: `<div class="hero-series">Ged&auml;chtnis-Serie &middot; Teil 1</div><div class="hero-eyebrow">Meinung &middot; Ged&auml;chtnis &middot; Identit&auml;t &middot; Psychologie</div>
 <h1>Jedes Mal, wenn du dich erinnerst, <span class="hl-rose">ver&auml;nderst du es.</span></h1>
 <div class="hero-subtitle">Dein Ged&auml;chtnis speichert nicht, was passiert ist. Es speichert, was z&auml;hlte. Und zwischen diesen beiden Dingen liegt ein Unterschied, der ver&auml;ndert, wie du dich selbst siehst.</div>
 <div class="hero-author"><div class="hero-divider"></div><div class="name">JUAN SCHUBERT</div><div class="role">ONIOKO &middot; 10+ Jahre Psychologie & Kognitionsforschung</div></div>
@@ -318,7 +318,7 @@ export default function MemoryArticle(): JSX.Element {
 
 <!-- NEXT TEASER -->
 <div class="next-teaser">
-<span class="nt-label">N&auml;chster Teil der Erinnerungsreihe</span>
+<span class="nt-label">N&auml;chster Teil der Ged&auml;chtnis-Serie</span>
 <div class="nt-title">Das Ged&auml;chtnis, das sich selbst nicht umschreibt. Wie ich gebaut habe, was dein Gehirn nicht sein kann.</div>
 </div>
 
