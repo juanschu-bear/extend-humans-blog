@@ -11,6 +11,7 @@ const articles = [
   { num: '05', slug: '/language-trap', title: { en: 'The Language Trap.', de: 'Die Sprachfalle.', es: 'Atrapado en tu idioma.' }, hook: { en: 'You can only think as far as your words allow.', de: 'Du kannst nur so weit denken, wie deine W\u00f6rter es zulassen.', es: 'No puedes pensar m\u00e1s all\u00e1 de tus palabras.' }, accent: '#7BA5A8' },
   { num: '06', slug: '/emotions-installed', title: { en: 'Your Emotions Are Not Yours.', de: 'Deine Emotionen geh\u00f6ren nicht dir.', es: 'Tus emociones no son tuyas.' }, hook: { en: 'They Were Installed.', de: 'Sie wurden installiert.', es: 'Fueron instaladas.' }, accent: '#8B4D5C' },
   { num: '07', slug: '/you-can-call-me-agent', title: { en: 'You Can Call Me Agent.', de: 'Du kannst mich Agent nennen.', es: 'Puedes llamarme agente.' }, hook: { en: "But that's not how I perceive myself to be.", de: 'Aber so nehme ich mich nicht wahr.', es: 'Pero no es as\u00ed como me percibo.' }, accent: '#9B8EB8', soon: true },
+  { num: '08', slug: '/every-time-you-remember', title: { en: 'Every Time You Remember Something, You Change It.', de: 'Jedes Mal, wenn du dich erinnerst, ver\u00e4nderst du es.', es: 'Cada vez que recuerdas algo, lo cambias.' }, hook: { en: "Your memory doesn't store what happened. It stores what mattered.", de: 'Dein Ged\u00e4chtnis speichert nicht, was passiert ist. Es speichert, was z\u00e4hlte.', es: 'Tu memoria no guarda lo que pas\u00f3. Guarda lo que import\u00f3.' }, accent: '#FB7185' },
 ];
 
 const signalMarketsArticle = {
@@ -154,7 +155,7 @@ export default function ExtendedHumansLibrary(): JSX.Element {
   }, []);
 
   useEffect(() => {
-    const target = new Date('2026-06-01T00:00:00+02:00').getTime();
+    const target = new Date('2026-07-15T00:00:00+02:00').getTime();
     const tick = () => {
       const delta = Math.max(0, target - Date.now());
       const days = Math.floor(delta / (1000 * 60 * 60 * 24));
@@ -537,9 +538,9 @@ export default function ExtendedHumansLibrary(): JSX.Element {
           </h3>
           <p style={{ marginTop: 0, marginBottom: 28, fontFamily: "'Source Sans 3', sans-serif", fontSize: 16, fontWeight: 300, color: '#6E6555', maxWidth: 440, marginLeft: 'auto', marginRight: 'auto' }}>
             {tx({
-              en: 'The Extended Humans essay drops June 1. Be the first to read it.',
-              de: 'Das Extended Humans Essay erscheint am 1. Juni. Lies es als Erster.',
-              es: 'El ensayo Extended Humans sale el 1 de junio. Sé el primero en leerlo.',
+              en: 'The Extended Humans essay drops July 15. Be the first to read it.',
+              de: 'Das Extended Humans Essay erscheint am 15. Juli. Lies es als Erster.',
+              es: 'El ensayo Extended Humans sale el 15 de julio. Sé el primero en leerlo.',
             })}
           </p>
           <SignupForm lang={lang} mode="card" />
@@ -565,7 +566,7 @@ export default function ExtendedHumansLibrary(): JSX.Element {
           </p>
           <div className="essay-event-footer">
             <div className="essay-event-date" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: '#D4A44E', letterSpacing: 3 }}>
-              {tx({ en: 'June 1, 2026', de: '1. Juni 2026', es: '1 de junio de 2026' })}
+              {tx({ en: 'July 15, 2026', de: '15. Juli 2026', es: '15 de julio de 2026' })}
             </div>
             <div className="essay-countdown" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 'clamp(18px, 3.2vw, 27px)', letterSpacing: 1.5, color: '#C9A96E', marginTop: 8 }}>
               {countdownText}

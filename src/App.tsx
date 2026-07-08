@@ -9,6 +9,7 @@ import CageOfProofArticle from './articles/CageOfProofArticle'
 import LanguageTrapArticle from './articles/LanguageTrapArticle'
 import EmotionsArticle from './articles/EmotionsArticle'
 import PriceOfYouArticle from './articles/PriceOfYouArticle'
+import MemoryArticle from './articles/MemoryArticle'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -861,6 +862,7 @@ export default function App(): JSX.Element {
       <Route path="/language-trap" element={<ArticleShell><LanguageTrapArticle /></ArticleShell>} />
       <Route path="/emotions-installed" element={<ArticleShell><EmotionsArticle /></ArticleShell>} />
       <Route path="/price-of-you" element={<ArticleShell><PriceOfYouArticle /></ArticleShell>} />
+      <Route path="/every-time-you-remember" element={<ArticleShell><MemoryArticle /></ArticleShell>} />
       <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
