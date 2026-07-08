@@ -11,7 +11,7 @@ const articles = [
   { num: '05', slug: '/language-trap', title: { en: 'The Language Trap.', de: 'Die Sprachfalle.', es: 'Atrapado en tu idioma.' }, hook: { en: 'You can only think as far as your words allow.', de: 'Du kannst nur so weit denken, wie deine W\u00f6rter es zulassen.', es: 'No puedes pensar m\u00e1s all\u00e1 de tus palabras.' }, accent: '#7BA5A8' },
   { num: '06', slug: '/emotions-installed', title: { en: 'Your Emotions Are Not Yours.', de: 'Deine Emotionen geh\u00f6ren nicht dir.', es: 'Tus emociones no son tuyas.' }, hook: { en: 'They Were Installed.', de: 'Sie wurden installiert.', es: 'Fueron instaladas.' }, accent: '#8B4D5C' },
   { num: '07', slug: '/you-can-call-me-agent', title: { en: 'You Can Call Me Agent.', de: 'Du kannst mich Agent nennen.', es: 'Puedes llamarme agente.' }, hook: { en: "But that's not how I perceive myself to be.", de: 'Aber so nehme ich mich nicht wahr.', es: 'Pero no es as\u00ed como me percibo.' }, accent: '#9B8EB8', soon: true },
-  { num: '08', slug: '/every-time-you-remember', title: { en: 'Every Time You Remember Something, You Change It.', de: 'Jedes Mal, wenn du dich erinnerst, ver\u00e4nderst du es.', es: 'Cada vez que recuerdas algo, lo cambias.' }, hook: { en: "Your memory doesn't store what happened. It stores what mattered.", de: 'Dein Ged\u00e4chtnis speichert nicht, was passiert ist. Es speichert, was z\u00e4hlte.', es: 'Tu memoria no guarda lo que pas\u00f3. Guarda lo que import\u00f3.' }, accent: '#FB7185' },
+  { num: '08', slug: '/every-time-you-remember', title: { en: 'Every Time You Remember Something, You Change It.', de: 'Jedes Mal, wenn du dich erinnerst, ver\u00e4nderst du es.', es: 'Cada vez que recuerdas algo, lo cambias.' }, hook: { en: "Your memory doesn't store what happened. It stores what mattered.", de: 'Dein Ged\u00e4chtnis speichert nicht, was passiert ist. Es speichert, was z\u00e4hlte.', es: 'Tu memoria no guarda lo que pas\u00f3. Guarda lo que import\u00f3.' }, accent: '#FB7185', series: { en: 'Memory Series · Part 1', de: 'Memory Series · Teil 1', es: 'Memory Series · Parte 1' } },
 ];
 
 const signalMarketsArticle = {
@@ -62,6 +62,7 @@ function ArticleRow({ article, lang, index }: { article: typeof articles[0]; lan
   const t = article.title[lang];
   const h = article.hook[lang];
   const soonText: Record<Lang, string> = { en: 'Coming Soon', de: 'Bald verf\u00fcgbar', es: 'Pr\u00f3ximamente' };
+  const seriesText = article.series?.[lang];
 
   return (
     <div
@@ -98,6 +99,22 @@ function ArticleRow({ article, lang, index }: { article: typeof articles[0]; lan
         }}>{article.num}</span>
         {/* Content */}
         <div style={{ flex: 1 }}>
+          {seriesText && (
+            <div style={{
+              display: 'inline-block',
+              marginBottom: 14,
+              padding: '5px 12px',
+              borderRadius: 999,
+              border: `1px solid ${hovered ? `${article.accent}55` : `${article.accent}33`}`,
+              background: hovered ? `${article.accent}18` : `${article.accent}10`,
+              color: hovered ? '#F8E9EC' : article.accent,
+              fontFamily: "'JetBrains Mono', monospace",
+              fontSize: 10,
+              letterSpacing: 2,
+              textTransform: 'uppercase' as const,
+              transition: 'all 0.3s',
+            }}>{seriesText}</div>
+          )}
           <h2 className="eh-article-title" style={{
             fontFamily: "'Cormorant Garamond', serif", fontSize: 'clamp(24px, 3.5vw, 36px)', fontWeight: 500,
             lineHeight: 1.2, color: hovered ? '#F5EDE0' : 'rgba(245,237,224,0.6)',
