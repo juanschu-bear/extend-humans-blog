@@ -1,10 +1,18 @@
-import { useState, type JSX } from 'react';
+import { useEffect, useState, type JSX } from 'react';
 
 type Lang = 'en' | 'de' | 'es';
 
 export default function MemoryArticle(): JSX.Element {
-  const [lang, setLang] = useState<Lang>('en');
+  const [lang, setLang] = useState<Lang>(() => {
+    const saved = typeof window !== 'undefined' ? window.localStorage.getItem('eh:lang') : null;
+    return saved === 'de' || saved === 'es' || saved === 'en' ? saved : 'en';
+  });
   const flags: Record<Lang, string> = { en: '\u{1F1EC}\u{1F1E7}', de: '\u{1F1E9}\u{1F1EA}', es: '\u{1F1EA}\u{1F1F8}' };
+
+  useEffect(() => {
+    window.localStorage.setItem('eh:lang', lang);
+    window.dispatchEvent(new Event('eh:lang-change'));
+  }, [lang]);
 
   const heroContent: Record<Lang, string> = {
     en: `<div class="hero-series">Memory Series &middot; Part 1</div><div class="hero-eyebrow">Opinion &middot; Memory &middot; Identity &middot; Psychology</div>
@@ -12,12 +20,12 @@ export default function MemoryArticle(): JSX.Element {
 <div class="hero-subtitle">Your memory doesn't store what happened. It stores what mattered. And there's a difference between those two things that will change how you see yourself.</div>
 <div class="hero-author"><div class="hero-divider"></div><div class="name">JUAN SCHUBERT</div><div class="role">ONIOKO &middot; 10+ Years in Psychology & Human Cognition</div></div>
 <div class="scroll-hint"><span>Read on</span><div class="scroll-arrow"></div></div>`,
-    de: `<div class="hero-series">Memory Series &middot; Teil 1</div><div class="hero-eyebrow">Meinung &middot; Ged&auml;chtnis &middot; Identit&auml;t &middot; Psychologie</div>
+    de: `<div class="hero-series">Erinnerungsreihe &middot; Teil 1</div><div class="hero-eyebrow">Meinung &middot; Ged&auml;chtnis &middot; Identit&auml;t &middot; Psychologie</div>
 <h1>Jedes Mal, wenn du dich erinnerst, <span class="hl-rose">ver&auml;nderst du es.</span></h1>
 <div class="hero-subtitle">Dein Ged&auml;chtnis speichert nicht, was passiert ist. Es speichert, was z&auml;hlte. Und zwischen diesen beiden Dingen liegt ein Unterschied, der ver&auml;ndert, wie du dich selbst siehst.</div>
 <div class="hero-author"><div class="hero-divider"></div><div class="name">JUAN SCHUBERT</div><div class="role">ONIOKO &middot; 10+ Jahre Psychologie & Kognitionsforschung</div></div>
 <div class="scroll-hint"><span>Weiterlesen</span><div class="scroll-arrow"></div></div>`,
-    es: `<div class="hero-series">Memory Series &middot; Parte 1</div><div class="hero-eyebrow">Opini&oacute;n &middot; Memoria &middot; Identidad &middot; Psicolog&iacute;a</div>
+    es: `<div class="hero-series">Serie de Memoria &middot; Parte 1</div><div class="hero-eyebrow">Opini&oacute;n &middot; Memoria &middot; Identidad &middot; Psicolog&iacute;a</div>
 <h1>Cada vez que recuerdas algo, <span class="hl-rose">lo cambias.</span></h1>
 <div class="hero-subtitle">Tu memoria no guarda lo que pas&oacute;. Guarda lo que import&oacute;. Y entre esas dos cosas hay una diferencia que va a cambiar c&oacute;mo te ves a ti mismo.</div>
 <div class="hero-author"><div class="hero-divider"></div><div class="name">JUAN SCHUBERT</div><div class="role">ONIOKO &middot; 10+ A&ntilde;os en Psicolog&iacute;a y Cognici&oacute;n Humana</div></div>
@@ -310,7 +318,7 @@ export default function MemoryArticle(): JSX.Element {
 
 <!-- NEXT TEASER -->
 <div class="next-teaser">
-<span class="nt-label">N&auml;chster Teil der Memory Series</span>
+<span class="nt-label">N&auml;chster Teil der Erinnerungsreihe</span>
 <div class="nt-title">Das Ged&auml;chtnis, das sich selbst nicht umschreibt. Wie ich gebaut habe, was dein Gehirn nicht sein kann.</div>
 </div>
 
@@ -460,7 +468,7 @@ export default function MemoryArticle(): JSX.Element {
 
 <!-- NEXT TEASER -->
 <div class="next-teaser">
-<span class="nt-label">Siguiente en la Memory Series</span>
+<span class="nt-label">Siguiente en la Serie de Memoria</span>
 <div class="nt-title">La memoria que no se reescribe a s&iacute; misma. C&oacute;mo constru&iacute; lo que tu cerebro no puede ser.</div>
 </div>
 
