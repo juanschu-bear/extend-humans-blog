@@ -172,7 +172,7 @@ export default function ExtendedHumansLibrary(): JSX.Element {
   }, []);
 
   useEffect(() => {
-    const target = new Date('2026-07-15T00:00:00+02:00').getTime();
+    const target = new Date('2026-08-15T00:00:00+02:00').getTime();
     const tick = () => {
       const delta = Math.max(0, target - Date.now());
       const days = Math.floor(delta / (1000 * 60 * 60 * 24));
@@ -555,9 +555,9 @@ export default function ExtendedHumansLibrary(): JSX.Element {
           </h3>
           <p style={{ marginTop: 0, marginBottom: 28, fontFamily: "'Source Sans 3', sans-serif", fontSize: 16, fontWeight: 300, color: '#6E6555', maxWidth: 440, marginLeft: 'auto', marginRight: 'auto' }}>
             {tx({
-              en: 'The Extended Humans essay drops July 15. Be the first to read it.',
-              de: 'Das Extended Humans Essay erscheint am 15. Juli. Lies es als Erster.',
-              es: 'El ensayo Extended Humans sale el 15 de julio. Sé el primero en leerlo.',
+              en: 'The Extended Humans essay drops August 15. Be the first to read it.',
+              de: 'Das Extended Humans Essay erscheint am 15. August. Lies es als Erster.',
+              es: 'El ensayo Extended Humans sale el 15 de agosto. Sé el primero en leerlo.',
             })}
           </p>
           <SignupForm lang={lang} mode="card" />
@@ -583,7 +583,7 @@ export default function ExtendedHumansLibrary(): JSX.Element {
           </p>
           <div className="essay-event-footer">
             <div className="essay-event-date" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: '#D4A44E', letterSpacing: 3 }}>
-              {tx({ en: 'July 15, 2026', de: '15. Juli 2026', es: '15 de julio de 2026' })}
+              {tx({ en: 'August 15, 2026', de: '15. August 2026', es: '15 de agosto de 2026' })}
             </div>
             <div className="essay-countdown" style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 'clamp(18px, 3.2vw, 27px)', letterSpacing: 1.5, color: '#C9A96E', marginTop: 8 }}>
               {countdownText}
