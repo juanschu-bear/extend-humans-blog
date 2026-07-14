@@ -10,6 +10,7 @@ import LanguageTrapArticle from './articles/LanguageTrapArticle'
 import EmotionsArticle from './articles/EmotionsArticle'
 import PriceOfYouArticle from './articles/PriceOfYouArticle'
 import MemoryArticle from './articles/MemoryArticle'
+import AvatarRemembersArticle from './articles/AvatarRemembersArticle'
 
 function ScrollToTop() {
   const { pathname } = useLocation()
@@ -863,6 +864,7 @@ export default function App(): JSX.Element {
       <Route path="/emotions-installed" element={<ArticleShell><EmotionsArticle /></ArticleShell>} />
       <Route path="/price-of-you" element={<ArticleShell><PriceOfYouArticle /></ArticleShell>} />
       <Route path="/every-time-you-remember" element={<ArticleShell><MemoryArticle /></ArticleShell>} />
+      <Route path="/your-avatar-remembers-you-better" element={<ArticleShell><AvatarRemembersArticle /></ArticleShell>} />
       <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </>
